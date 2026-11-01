@@ -66,5 +66,5 @@ gas_real <- gas_cpi |>
 gas_real_complete <- gas_real |>
   filter(!is.na(CPIAUCNS))
 
-write_csv(gas_real, "data/gas_real.csv")
+write_csv(gas_real_complete, "data/gas_real.csv")
   
