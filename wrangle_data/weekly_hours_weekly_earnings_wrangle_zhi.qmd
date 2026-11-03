@@ -47,11 +47,26 @@ weekly_earnings_all <- weekly_earnings_all |>
          Month = month(Date)) |>
   select(-Date)
 
+# Adjust weekly earnings to September 2026 dollars
+CPI <- read.csv("../raw_data/CPIAUCNS.csv") |>
+  mutate(Date = as.Date(observation_date),
+         Year = year(Date),
+         Month = month(Date))
+
+CPI_base <- CPI |>
+  filter(Date == as.Date("2026-09-01")) |>
+  pull(CPIAUCNS)
+
+weekly_earnings_all <- weekly_earnings_all |>
+  left_join(CPI |> select(Year, Month, CPIAUCNS), by = c("Year", "Month")) |>
+  mutate(real_weekly_earnings = weekly_earnings * (CPI_base / CPIAUCNS)) |>
+  filter(!is.na(CPIAUCNS)) |>
+  select(-CPIAUCNS)
+
 #Save
 write_csv(weekly_earnings_all, "../data/weekly_earnings_all.csv")
 
 ```
-
 
 ```{r, warning=FALSE, message=FALSE}
 #Weekly Hours
