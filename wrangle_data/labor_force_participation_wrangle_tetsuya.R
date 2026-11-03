@@ -23,7 +23,7 @@ for (i in 1:length(state_initials)) {
   name <- state_initials[i]
   # Import the state's labor force participation
   new_data <- read_csv(
-    paste0("raw_data/labor_force_participation/", name, ".csv"),
+    paste0("../raw_data/labor_force_participation/", name, ".csv"),
     show_col_types = FALSE
   ) |>
     #renaming the columns for date and labor force participation
@@ -60,5 +60,5 @@ labor_force_all <- labor_force_all |>
 # Export
 write_csv(
   labor_force_all,
-  "data/labor_force_participation_all.csv"
+  "../data/labor_force_participation_all.csv"
 )

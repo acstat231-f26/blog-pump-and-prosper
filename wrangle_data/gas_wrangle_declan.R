@@ -5,8 +5,8 @@ library(lubridate)
 
 # Import
 
-gas_raw <- read.csv("raw_data/MasterGas.csv")
-CPI <- read.csv("raw_data/CPIAUCNS.csv")
+gas_raw <- read.csv("../raw_data/MasterGas.csv")
+CPI <- read.csv("../raw_data/CPIAUCNS.csv")
 
 gas_cleaned <- gas_raw |>
   mutate(
@@ -66,5 +66,5 @@ gas_real <- gas_cpi |>
 gas_real_complete <- gas_real |>
   filter(!is.na(CPIAUCNS))
 
-write_csv(gas_real_complete, "data/gas_real.csv")
+write_csv(gas_real_complete, "../data/gas_real.csv")
   

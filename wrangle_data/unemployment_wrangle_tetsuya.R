@@ -9,7 +9,7 @@ library(dplyr)
 
 # Import Massachusetts unemployment data
 
-MA <- read_csv("raw_data/unemployment/MA.csv")
+MA <- read_csv("../raw_data/unemployment/MA.csv")
 
 # View the first six observations
 head(MA)
@@ -33,7 +33,7 @@ for (i in 1:length(state_initials)) {
   
   # Import the state's unemployment data
   new_data <- read_csv(
-    paste0("raw_data/unemployment/", name, ".csv"),
+    paste0("../raw_data/unemployment/", name, ".csv"),
     show_col_types = FALSE
   ) |>
     #renaming the columns for date and unemployment rate.   
@@ -73,6 +73,6 @@ unemployment_complete <- unemployment_all |>
 
 write_csv(
   unemployment_complete,
-  "data/unemployment_all.csv"
+  "../data/unemployment_all.csv"
 )
 

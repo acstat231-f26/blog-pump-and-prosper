@@ -10,18 +10,18 @@ library(dplyr)
 
 #read all the csv files
 unemployment <- read_csv(
-  "data/unemployment_all.csv"
+  "../data/unemployment_all.csv"
 )
 
 gas <- read_csv(
-  "data/gas_real.csv"
+  "../data/gas_real.csv"
 )
 
 
-weekly_earning <- read_csv("data/weekly_earnings_all.csv")
+weekly_earning <- read_csv("../data/weekly_earnings_all.csv")
 
 
-weekly_hours <- read_csv("data/weekly_hours_all.csv")
+weekly_hours <- read_csv("../data/weekly_hours_all.csv")
 
 
 gas <- gas |>
@@ -80,4 +80,4 @@ colSums(is.na(combined_data))
 
 
 #export
-write_csv(combined_data, "data/combined_data.csv")
+write_csv(combined_data, "../data/combined_data.csv")
