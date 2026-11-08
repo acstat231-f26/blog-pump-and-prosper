@@ -19,6 +19,9 @@ options(scipen = 1, knitr.kable.NA = "")
 library(tidyverse)
 library(knitr)
 library(kableExtra)
+
+# Final dataset prepared by complete_wrangled_data_declan_and_zhi.R
+combined_data <- read_csv("data/combined_data.csv", show_col_types = FALSE)
 ```
 
 # Getting started

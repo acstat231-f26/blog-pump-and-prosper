@@ -1,6 +1,10 @@
 project:
   type: website
   output-dir: docs
+  render:
+    - index.qmd
+    - another-page.qmd
+    - yet-another-page.qmd
 
 # Can customize this section with options from the following page:
 # https://quarto.org/docs/websites/website-navigation.html
