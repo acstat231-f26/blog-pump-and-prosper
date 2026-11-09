@@ -46,7 +46,10 @@ source(
 )
 ```
 
-The `chdir = TRUE` argument temporarily sets the working directory to the script's location. File paths within the script are therefore relative to `wrangle_data/`.
+
+We use `chdir = TRUE` when sourcing the consolidated wrangling script so that relative file paths are interpreted from the script's directory rather than the current RStudio working directory. This allows the script to access the raw datasets and save the processed outputs consistently.
+
+**Reference:** R Core Team. *R Documentation: source — Read R Code from a File, a Connection or Expressions.* https://stat.ethz.ch/R-manual/R-devel/library/base/html/source.html
 
 The script uses the raw datasets already included in the repository.
 
