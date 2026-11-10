@@ -242,7 +242,8 @@ write_csv(labor_force_all,
 # Combine the four main datasets — Tetsuya Tanaka
 
 
-# Labor-force participation remains available as a separate clean CSV rather than being added to the main analysis table.
+# Labor-force participation remains available as a separate clean CSV rather 
+# than being added to the main analysis table.
 
 # Use the objects created in the sections above; no intermediate rereading.
 unemployment <- unemployment_complete
