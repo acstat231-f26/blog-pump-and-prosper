@@ -9,10 +9,110 @@ Quarto enables you to weave together content and executable code into a finished
 
 ## Running Code
 
+
+```{r}
+library(tidyverse)
+library(sf)
+library(plotly)
+library(ggplot2)
+library(maps)
+library(mdsr)
+library(sf)
+library(ggspatial)
+library(leaflet)
+library(tidyverse)
+```
+
+
 When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
 
 ```{r}
-1 + 1
+# Create sf object for US counties
+full_data <- read_csv("../data/combined_data.csv")
+
+
+states_map <- maps::map("state", region = ".",
+                       plot = FALSE, fill = TRUE)|>  
+  st_as_sf()
+
+state_abre <- c(
+  "alabama" = "AL",
+  "arizona" = "AZ",
+  "arkansas" = "AR",
+  "california" = "CA",
+  "colorado" = "CO",
+  "connecticut" = "CT",
+  "delaware" = "DE",
+  "district of columbia" = "DC",
+  "florida" = "FL",
+  "georgia" = "GA",
+  "idaho" = "ID",
+  "illinois" = "IL",
+  "indiana" = "IN",
+  "iowa" = "IA",
+  "kansas" = "KS",
+  "kentucky" = "KY",
+  "louisiana" = "LA",
+  "maine" = "ME",
+  "maryland" = "MD",
+  "massachusetts" = "MA",
+  "michigan" = "MI",
+  "minnesota" = "MN",
+  "mississippi" = "MS",
+  "missouri" = "MO",
+  "montana" = "MT",
+  "nebraska" = "NE",
+  "nevada" = "NV",
+  "new hampshire" = "NH",
+  "new jersey" = "NJ",
+  "new mexico" = "NM",
+  "new york" = "NY",
+  "north carolina" = "NC",
+  "north dakota" = "ND",
+  "ohio" = "OH",
+  "oklahoma" = "OK",
+  "oregon" = "OR",
+  "pennsylvania" = "PA",
+  "rhode island" = "RI",
+  "south carolina" = "SC",
+  "south dakota" = "SD",
+  "tennessee" = "TN",
+  "texas" = "TX",
+  "utah" = "UT",
+  "vermont" = "VT",
+  "virginia" = "VA",
+  "washington" = "WA",
+  "west virginia" = "WV",
+  "wisconsin" = "WI",
+  "wyoming" = "WY")
+
+states_map <- states_map |>
+  mutate(State = recode(ID, !!!state_abre)) |> select(-ID)
+#Inner join drop
+full_data_with_state <- left_join(states_map, full_data , by = "State")
+
+month_variable = "2024-11-01"
+
+full_data_with_state <- filter(full_data_with_state, 
+month == month_variable)
+
+
+Gasplot <- ggplot(full_data_with_state, aes(geometry=geom, fill = MRA_Regular)) +
+  geom_sf() +
+  scale_fill_distiller(type="seq", direction=1) +
+  theme_void() +
+  labs(title = "Gas",
+       subtitle = "Gas", 
+    fill = "Real Prices",
+       caption = "Source: \"Higher Rates Of Hate Crimes \n
+       Are Tied To Income Inequality\"")
+
+plotly::ggplotly(Gasplot)
+
+
+monthvector = 
+  #indicies into month 
+  #unique function
 ```
 
 You can add options to executable code like this 
