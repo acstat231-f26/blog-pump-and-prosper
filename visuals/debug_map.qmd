@@ -74,7 +74,6 @@ Gasplot <- ggplot(full_data_with_state_month,
     fill = "Real Prices",
     caption = paste("Month:", as.character(month_variable)))
 
-
 Gasplot
 
 plotly::ggplotly(Gasplot)
