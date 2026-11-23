@@ -177,7 +177,7 @@ for (i in seq_along(state_initials)) {
     rename(Date = 1, unemployment_rate = 2) |>
     mutate(State = name)
   
-# Add the state's data to the combined dataframe
+  # Add the state's data to the combined dataframe
   unemployment_all <- bind_rows(
     unemployment_all,
     new_data)
@@ -213,7 +213,7 @@ for (i in seq_along(state_initials)) {
     show_col_types = FALSE) |>
     #renaming the columns for date and labor force participation
     rename(Date = 1,
-      labor_force_participation_rate = 2) |>
+           labor_force_participation_rate = 2) |>
     mutate(State = name)
   # Add the state's data to the combined dataframe
   labor_force_all <- bind_rows(
@@ -288,6 +288,10 @@ combined_data <- gas |>
 # Keep the monthly date for plotting; remove duplicate source date columns.
 combined_data <- combined_data |>
   select(-observation_date, -Date)
+
+# Hours of work needed to buy 15 gallons of regular gasoline.
+combined_data <- combined_data |>
+  mutate(hours_per_fillup = 15 * MRA_Regular * weekly_hours / real_weekly_earnings)
 
 # Check the final table for missing data and duplicate state-months.
 combined_data |> summarise(across(everything(), ~ sum(is.na(.x))))

@@ -96,5 +96,33 @@
     "title": "Website title",
     "section": "A note",
     "text": "A note\nNotice that you can also modify the YAML headings at the top of each page as I did in the first subpage or completely delete them, as I did here."
+  },
+  {
+    "objectID": "visuals/debug_map.html",
+    "href": "visuals/debug_map.html",
+    "title": "Pump and Prosper — Visualization Debug",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(plotly)\n\nfull_data &lt;- read_csv(\"../data/combined_data.csv\", show_col_types = FALSE) |&gt;\n  filter(month &gt;= as.Date(\"2024-12-01\")) |&gt;  # Exclude partial November 2024.\n  arrange(month, State) |&gt;\n  mutate(\n    month_label = format(month, \"%Y-%m\"),\n    hover_label = paste0(\n      State, \"&lt;br&gt;Month: \", month_label,\n      \"&lt;br&gt;Hours for 15 gallons: \", round(hours_per_fillup, 2),\n      \"&lt;br&gt;Real gas price: $\", round(MRA_Regular, 2), \"/gallon\"\n    )\n  )"
+  },
+  {
+    "objectID": "visuals/debug_map.html#animated-affordability-map",
+    "href": "visuals/debug_map.html#animated-affordability-map",
+    "title": "Pump and Prosper — Visualization Debug",
+    "section": "1. Animated affordability map",
+    "text": "1. Animated affordability map\n\nplot_ly(\n  data = full_data,\n  type = \"choropleth\",\n  locations = ~State,\n  locationmode = \"USA-states\",\n  z = ~hours_per_fillup,\n  frame = ~month_label,\n  text = ~hover_label,\n  hoverinfo = \"text\",\n  colorscale = \"YlOrRd\",\n  zmin = min(full_data$hours_per_fillup),\n  zmax = max(full_data$hours_per_fillup),\n  colorbar = list(title = \"Hours\")\n) |&gt;\n  layout(\n    title = \"Hours of Work Needed for 15 Gallons\",\n    geo = list(scope = \"usa\"),\n    height = 600\n  ) |&gt;\n  animation_opts(frame = 800, transition = 0, redraw = TRUE) |&gt;\n  animation_slider(currentvalue = list(prefix = \"Month: \"))"
+  },
+  {
+    "objectID": "visuals/debug_map.html#animated-real-gasoline-price-map",
+    "href": "visuals/debug_map.html#animated-real-gasoline-price-map",
+    "title": "Pump and Prosper — Visualization Debug",
+    "section": "2. Animated real gasoline price map",
+    "text": "2. Animated real gasoline price map\n\nplot_ly(\n  data = full_data,\n  type = \"choropleth\",\n  locations = ~State,\n  locationmode = \"USA-states\",\n  z = ~MRA_Regular,\n  frame = ~month_label,\n  text = ~hover_label,\n  hoverinfo = \"text\",\n  colorscale = \"Blues\",\n  zmin = min(full_data$MRA_Regular),\n  zmax = max(full_data$MRA_Regular),\n  colorbar = list(title = \"2026 $/gal\")\n) |&gt;\n  layout(\n    title = \"Real Regular Gasoline Prices (September 2026 Dollars)\",\n    geo = list(scope = \"usa\"),\n    height = 600\n  ) |&gt;\n  animation_opts(frame = 800, transition = 0, redraw = TRUE) |&gt;\n  animation_slider(currentvalue = list(prefix = \"Month: \"))"
+  },
+  {
+    "objectID": "visuals/debug_map.html#average-affordability-over-time",
+    "href": "visuals/debug_map.html#average-affordability-over-time",
+    "title": "Pump and Prosper — Visualization Debug",
+    "section": "3. Average affordability over time",
+    "text": "3. Average affordability over time\n\ntrend_data &lt;- full_data |&gt;\n  group_by(month) |&gt;\n  summarise(\n    mean_hours_per_fillup = mean(hours_per_fillup),\n    .groups = \"drop\"\n  )\n\ntrend_plot &lt;- ggplot(\n  trend_data,\n  aes(x = month, y = mean_hours_per_fillup)\n) +\n  geom_line() +\n  geom_point() +\n  scale_x_date(date_breaks = \"3 months\", date_labels = \"%b %Y\") +\n  labs(\n    title = \"Average Hours of Work Needed for 15 Gallons\",\n    subtitle = \"Equal-weighted average across 50 states\",\n    x = NULL,\n    y = \"Hours of work\"\n  ) +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 35, hjust = 1))\n\nggplotly(trend_plot, tooltip = c(\"x\", \"y\"))\n\n\n\n\n\nOctober 2025 is absent because the CPI series used for the real variables is missing that month."
   }
 ]

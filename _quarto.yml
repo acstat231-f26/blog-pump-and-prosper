@@ -5,6 +5,7 @@ project:
     - index.qmd
     - another-page.qmd
     - yet-another-page.qmd
+    - visuals/debug_map.qmd
 
 # Can customize this section with options from the following page:
 # https://quarto.org/docs/websites/website-navigation.html
