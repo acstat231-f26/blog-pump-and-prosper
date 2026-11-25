@@ -56,29 +56,24 @@ states_map <- states_map |>
   mutate(State = recode(ID, !!!state_abre)) |> select(-ID)
 full_data_with_state <- left_join(states_map, full_data , by = "State")
 
-glimpse(full_data_with_state)
-
-full_data_with_state <- round(full_data_with_state, MRA_Regular, 2)
-
-#All unique months and filter which one we want
+#All unique months (chronologically) and filter which one we want
 unique_months <- sort(unique(full_data_with_state$month))
 month_variable = unique_months[2]
-full_data_with_state_month <- full_data_with_state |> 
+month_name <- format(as.Date(month_variable), "%B %Y")
+full_data_with_state_specific_month <- full_data_with_state |> 
   filter(month == month_variable)
 
-
-
-
-Gasplot <- ggplot(full_data_with_state_month, 
+#Create a plot for the specific month
+Gasplot <- ggplot(full_data_with_state_specific_month, 
                   aes(geometry = geom, fill = MRA_Regular)) +
   geom_sf() +
   scale_fill_distiller(type = "seq", direction = 1) +
   theme_void() +
   labs(
-    title = "Gas",
-    subtitle = "Gas",
-    fill = "Real Prices",
-    caption = paste("Month:", as.character(month_variable)))
+    title = paste("Average Regular Gas Price by State,"),
+    subtitle = "Real (inflation-adjusted) prices per gallon",
+    fill = "Price ($/gal)",
+    caption = paste("Month:", month_name))
 
 Gasplot
 
@@ -86,93 +81,163 @@ plotly::ggplotly(Gasplot)
 
 ```
 
+
+
 You can add options to executable code like this 
 
+
 ```{r}
-#Idea:
+# Creating scale for every month so shades are comparable across months
+price_limits <- range(full_data_with_state$MRA_Regular, na.rm = TRUE)
 
-# Read gas data
-full_data <- read_csv("../data/combined_data.csv")
+# Empty list to then fill with the plots
+month_plots <- list()
+# For loop to create a different month in each index
+for (i in seq_along(unique_months)) {
+  #Filtering for the unique month
+  month_variable <- unique_months[i]
+  month_name <- format(as.Date(month_variable), "%B %Y")
+  full_data_with_state_specific_month <- full_data_with_state |> 
+    filter(month == month_variable)
+  #Creating plot
+  Gasplot <- ggplot(full_data_with_state_specific_month, 
+                    aes(geometry = geom, fill = MRA_Regular)) +
+    geom_sf() +
+    scale_fill_distiller(type = "seq", direction = 1, limits = price_limits) +
+    theme_void() +
+    labs(
+      title = paste("Average Regular Gas Price by State,", month_name),
+      subtitle = "Real (inflation-adjusted) prices per gallon",
+      fill = "Price ($/gal)",
+      caption = paste("Month:", month_name))
+  #Add it to month_plots
+  month_plots[[i]] <- Gasplot}
 
-# Create sf object for US states
-states_map <- maps::map(
-  "state",
-  region = ".",
-  plot = FALSE,
-  fill = TRUE
-) |>
-  st_as_sf()
+# Replicating the list but for plotly instead of ggplot
+plotly_plots <- list()
+for (i in seq_along(month_plots)) {
+  plotly_plots[[i]] <- plotly_build(ggplotly(month_plots[[i]]))}
 
-# State abbreviations
-state_abre <- c(
-  "alabama" = "AL", "arizona" = "AZ", "arkansas" = "AR",
-  "california" = "CA", "colorado" = "CO", "connecticut" = "CT",
-  "delaware" = "DE", "district of columbia" = "DC", "florida" = "FL",
-  "georgia" = "GA", "idaho" = "ID", "illinois" = "IL",
-  "indiana" = "IN", "iowa" = "IA", "kansas" = "KS",
-  "kentucky" = "KY", "louisiana" = "LA", "maine" = "ME",
-  "maryland" = "MD", "massachusetts" = "MA", "michigan" = "MI",
-  "minnesota" = "MN", "mississippi" = "MS", "missouri" = "MO",
-  "montana" = "MT", "nebraska" = "NE", "nevada" = "NV",
-  "new hampshire" = "NH", "new jersey" = "NJ", "new mexico" = "NM",
-  "new york" = "NY", "north carolina" = "NC", "north dakota" = "ND",
-  "ohio" = "OH", "oklahoma" = "OK", "oregon" = "OR",
-  "pennsylvania" = "PA", "rhode island" = "RI",
-  "south carolina" = "SC", "south dakota" = "SD",
-  "tennessee" = "TN", "texas" = "TX", "utah" = "UT",
-  "vermont" = "VT", "virginia" = "VA", "washington" = "WA",
-  "west virginia" = "WV", "wisconsin" = "WI", "wyoming" = "WY"
-)
+# This step is probably the most confusing, so I had to learn a bit about how
+# Plotly works. Each month's plot in plotly_plots has its own set of
+# "traces", that together produces the plot and we need to group these traces 
+# so that Plotly knows what to display for each month.
 
-# Rename state ID to abbreviation
-states_map <- states_map |>
-  mutate(State = recode(ID, !!!state_abre)) |>
-  select(-ID)
+# Empty list that will collect the trace from every month
+all_traces <- list()
+# Empty vector to record which month each trace came from.
+trace_month <- c()
+# Go through each month's plotly plot, one at a time
+for (i in seq_along(plotly_plots)) {
+  # Grab this month's traces (the pieces that draw its map)
+  month_traces <- plotly_plots[[i]]$x$data
+  
+  # Add them to the end of the big list
+  all_traces <- c(all_traces, month_traces)
+  
+  # Add one label per trace saying "this came from month i".
+  # rep(i, n) repeats i n times, e.g. rep(2, 3) gives 2 2 2
+  trace_month <- c(trace_month, rep(i, length(month_traces)))
+}
 
-# Join state map with gas data
-full_data_with_state <- left_join(
-  states_map,
-  full_data,
-  by = "State"
-)
+# Hide every trace except month 1's.
+# trace_month[j] == 1 is TRUE for month 1 traces and FALSE for all others,
+# and that TRUE/FALSE becomes the trace's "visible" setting.
+# Without this, all months would be drawn on top of each other.
+for (j in seq_along(all_traces)) {
+  all_traces[[j]]$visible <- trace_month[j] == 1
+}
 
-# Order months chronologically
-unique_months <- sort(unique(full_data_with_state$month))
+# Copy month 1's figure to keep its layout, title and settings,
+# then replace its traces with the full list from every month
+combined <- plotly_plots[[1]]
+combined$x$data <- all_traces
 
-# Ensure months are ordered chronologically
-full_data_with_state <- full_data_with_state |>
-  mutate(
-    month = factor(
-      month,
-      levels = sort(unique(month))
+# Check: should look exactly like month 1 (the other months are there, just hidden)
+combined
+
+# Check: total number of traces, and how many each month contributed.
+# Top row = month number, bottom row = number of traces for that month.
+# Counts differ because not every state has data every month.
+length(all_traces)
+table(trace_month)
+
+```
+
+
+
+```{r}
+# Creating scale for every month so shades are comparable across months
+price_limits <- range(full_data_with_state$MRA_Regular, na.rm = TRUE)
+price_limits
+
+
+
+
+
+
+
+
+
+# Your original plot, wrapped in a function of the month
+make_month_plot <- function(m) {
+  full_data_with_state |>
+    filter(month == m) |>
+    ggplot(aes(geometry = geom, fill = MRA_Regular)) +
+    geom_sf() +
+    scale_fill_distiller(type = "seq", direction = 1, limits = price_limits) +
+    theme_void() +
+    labs(
+      title = "Gas",
+      subtitle = "Gas",
+      fill = "Real Prices",
+      caption = paste("Month:", as.character(m)))
+}
+
+# One ggplot per month, each converted to plotly
+# (purrr:: prefix needed because maps::map masks purrr::map)
+month_plots <- purrr::map(unique_months, make_month_plot)
+built_plots <- purrr::map(month_plots, ~ plotly_build(ggplotly(.x)))
+
+# Stack every month's traces into one figure, remembering which month each belongs to
+all_traces  <- list()
+trace_month <- c()
+for (i in seq_along(built_plots)) {
+  tr <- built_plots[[i]]$x$data
+  all_traces  <- c(all_traces, tr)
+  trace_month <- c(trace_month, rep(i, length(tr)))
+}
+
+# Show only the first month to start
+for (j in seq_along(all_traces)) {
+  all_traces[[j]]$visible <- trace_month[j] == 1
+}
+
+combined <- built_plots[[1]]
+combined$x$data <- all_traces
+
+# Slider: each step turns on one month's traces and updates the title
+steps <- purrr::map(seq_along(unique_months), function(i) {
+  list(
+    method = "update",
+    label  = as.character(unique_months[i]),
+    args   = list(
+      list(visible = trace_month == i),
+      list(title = list(text = paste("Gas —", as.character(unique_months[i]))))
     )
   )
+})
 
-# Consistent color scale
-price_range <- range(
-  full_data_with_state$MRA_Regular,
-  na.rm = TRUE
-)
+combined$x$layout$title   <- list(text = paste("Gas —", as.character(unique_months[1])))
+combined$x$layout$sliders <- list(list(
+  active = 0,
+  currentvalue = list(prefix = "Month: "),
+  pad = list(t = 30),
+  steps = steps
+))
 
-# Interactive map with month slider
-gas_plot2 <- plot_ly(
-  data = full_data_with_state,
-  type = "choropleth",
-  locations = ~State,
-  locationmode = "USA-states",
-  z = ~MRA_Regular,
-  frame = ~month,
-  zmin = price_range[1],
-  zmax = price_range[2],
-  colorscale = "YlOrRd",
-  colorbar = list(title = "Real Prices")
-) |>
-  layout(
-    title = "Gas Prices by State",
-    geo = list(scope = "usa")
-  )
-
-gas_plot2
+combined
 ```
+
 
 The `echo: false` option disables the printing of code (only output is displayed).
