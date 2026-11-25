@@ -58,7 +58,7 @@ full_data_with_state <- left_join(states_map, full_data , by = "State")
 
 #All unique months (chronologically) and filter which one we want
 unique_months <- sort(unique(full_data_with_state$month))
-month_variable = unique_months[2]
+month_variable = unique_months[1]
 month_name <- format(as.Date(month_variable), "%B %Y")
 full_data_with_state_specific_month <- full_data_with_state |> 
   filter(month == month_variable)
@@ -75,8 +75,6 @@ Gasplot <- ggplot(full_data_with_state_specific_month,
     fill = "Price ($/gal)",
     caption = paste("Month:", month_name))
 
-Gasplot
-
 plotly::ggplotly(Gasplot)
 
 ```
@@ -87,6 +85,8 @@ You can add options to executable code like this
 
 
 ```{r}
+#Creating the slider map
+
 # Creating scale for every month so shades are comparable across months
 price_limits <- range(full_data_with_state$MRA_Regular, na.rm = TRUE)
 
@@ -106,7 +106,7 @@ for (i in seq_along(unique_months)) {
     scale_fill_distiller(type = "seq", direction = 1, limits = price_limits) +
     theme_void() +
     labs(
-      title = paste("Average Regular Gas Price by State,", month_name),
+      title = paste("Average Regular Gas Price by State"),
       subtitle = "Real (inflation-adjusted) prices per gallon",
       fill = "Price ($/gal)",
       caption = paste("Month:", month_name))
@@ -118,10 +118,10 @@ plotly_plots <- list()
 for (i in seq_along(month_plots)) {
   plotly_plots[[i]] <- plotly_build(ggplotly(month_plots[[i]]))}
 
-# This step is probably the most confusing, so I had to learn a bit about how
-# Plotly works. Each month's plot in plotly_plots has its own set of
-# "traces", that together produces the plot and we need to group these traces 
-# so that Plotly knows what to display for each month.
+# This part is probably the most confusing, so I had to learn a bit about how
+# Plotly works. Each month's plot in plotly_plots has its own set of "traces", 
+# that together produces the plot. We need to group these traces so that Plotly 
+# knows what to display for each month.
 
 # Empty list that will collect the trace from every month
 all_traces <- list()
@@ -129,112 +129,140 @@ all_traces <- list()
 trace_month <- c()
 # Go through each month's plotly plot, one at a time
 for (i in seq_along(plotly_plots)) {
-  # Grab this month's traces (the pieces that draw its map)
+  # Grab this month's traces and appends it
   month_traces <- plotly_plots[[i]]$x$data
-  
-  # Add them to the end of the big list
   all_traces <- c(all_traces, month_traces)
-  
-  # Add one label per trace saying "this came from month i".
-  # rep(i, n) repeats i n times, e.g. rep(2, 3) gives 2 2 2
-  trace_month <- c(trace_month, rep(i, length(month_traces)))
-}
+  # Labels where the trace came from
+  trace_month <- c(trace_month, rep(i, length(month_traces)))}
 
-# Hide every trace except month 1's.
-# trace_month[j] == 1 is TRUE for month 1 traces and FALSE for all others,
-# and that TRUE/FALSE becomes the trace's "visible" setting.
-# Without this, all months would be drawn on top of each other.
+# This for loop is to determine which traces are intially shown (Month 1)
 for (j in seq_along(all_traces)) {
-  all_traces[[j]]$visible <- trace_month[j] == 1
-}
+  all_traces[[j]]$visible <- trace_month[j] == 1}
 
-# Copy month 1's figure to keep its layout, title and settings,
-# then replace its traces with the full list from every month
+# Inherit Month 1's Layout
 combined <- plotly_plots[[1]]
+# Then add the trace
 combined$x$data <- all_traces
 
-# Check: should look exactly like month 1 (the other months are there, just hidden)
+# Create the slider and the ticker marks
+tickers <- list()
+for (i in seq_along(unique_months)) {
+  month_name <- format(as.Date(unique_months[i]), "%B %Y")
+  show_specific_month <- trace_month == i
+  #Controls what occurs on each ticker 
+  tickers[[i]] <- list(
+    method = "restyle", 
+    args = list("visible", show_specific_month), 
+    label = month_name)
+}
+
+# Attach the slider to the combined figure
+combined$x$layout$sliders <- list(
+  list(
+    active = 0,                                  
+    currentvalue = list(prefix = "Month: "), 
+    x = 0.1,
+    y = 0.2,
+    steps = tickers))
+
 combined
 
-# Check: total number of traces, and how many each month contributed.
-# Top row = month number, bottom row = number of traces for that month.
-# Counts differ because not every state has data every month.
-length(all_traces)
-table(trace_month)
 
 ```
 
 
 
 ```{r}
-# Creating scale for every month so shades are comparable across months
-price_limits <- range(full_data_with_state$MRA_Regular, na.rm = TRUE)
-price_limits
+# This is essentially the same as the last map but I'm adding unemployment to 
+# to the right of the map for gas prices
 
+# Fixed color scale for each variable, so shades are comparable across months
+gas_limits   <- range(full_data_with_state$MRA_Regular, na.rm = TRUE)
+unemp_limits <- range(full_data_with_state$unemployment_rate, na.rm = TRUE)
 
-
-
-
-
-
-
-
-# Your original plot, wrapped in a function of the month
-make_month_plot <- function(m) {
-  full_data_with_state |>
-    filter(month == m) |>
-    ggplot(aes(geometry = geom, fill = MRA_Regular)) +
+# Empty list which is then filled with both maps
+plotly_plots <- list()
+for (i in seq_along(unique_months)) {
+  month_variable <- unique_months[i]
+  full_data_with_state_specific_month <- full_data_with_state |>
+    filter(month == month_variable)
+  # Left map: Gas Prices (blue)
+  Gasplot <- ggplot(full_data_with_state_specific_month,
+                    aes(geometry = geom, fill = MRA_Regular)) +
     geom_sf() +
-    scale_fill_distiller(type = "seq", direction = 1, limits = price_limits) +
+    scale_fill_distiller(type = "seq", direction = 1, limits = gas_limits) +
     theme_void() +
-    labs(
-      title = "Gas",
-      subtitle = "Gas",
-      fill = "Real Prices",
-      caption = paste("Month:", as.character(m)))
+    labs(fill = "Gas ($/gal)")
+  # Right map: Unemployment Rate (red)
+  Unempplot <- ggplot(full_data_with_state_specific_month,
+                      aes(geometry = geom, fill = unemployment_rate)) +
+    geom_sf() +
+    scale_fill_distiller(type = "seq", palette = "Reds", direction = 1,
+                         limits = unemp_limits) +
+    theme_void() +
+    labs(fill = "Unemployment (%)")
+  
+  # Side-by-side figure for one month
+  fig <- plotly_build(
+    subplot(ggplotly(Gasplot), ggplotly(Unempplot), nrows = 1, margin = 0.08))
+  # Adjusting position of the legends by finding legend from the traces 
+  # and then changing x position.
+  bar_x <- c(0.42, 1)
+  cb <- 0
+  for (k in seq_along(fig$x$data)) {
+    if (!is.null(fig$x$data[[k]]$marker$colorbar)) {
+      cb <- cb + 1
+      fig$x$data[[k]]$marker$colorbar$x <- bar_x[cb]
+      fig$x$data[[k]]$marker$colorbar$len <- 0.3
+      fig$x$data[[k]]$marker$colorbar$lenmode <- "fraction"
+    }}
+  plotly_plots[[i]] <- fig
 }
 
-# One ggplot per month, each converted to plotly
-# (purrr:: prefix needed because maps::map masks purrr::map)
-month_plots <- purrr::map(unique_months, make_month_plot)
-built_plots <- purrr::map(month_plots, ~ plotly_build(ggplotly(.x)))
-
-# Stack every month's traces into one figure, remembering which month each belongs to
+# Sorting all the traces by month
 all_traces  <- list()
 trace_month <- c()
-for (i in seq_along(built_plots)) {
-  tr <- built_plots[[i]]$x$data
-  all_traces  <- c(all_traces, tr)
-  trace_month <- c(trace_month, rep(i, length(tr)))
-}
+for (i in seq_along(plotly_plots)) {
+  month_traces <- plotly_plots[[i]]$x$data
+  all_traces  <- c(all_traces, month_traces)
+  trace_month <- c(trace_month, rep(i, length(month_traces)))}
 
-# Show only the first month to start
+# Starting view is Month 1
 for (j in seq_along(all_traces)) {
-  all_traces[[j]]$visible <- trace_month[j] == 1
-}
+  all_traces[[j]]$visible <- trace_month[j] == 1}
 
-combined <- built_plots[[1]]
+# Inherit Month 1's Layout, then add in all traces
+combined <- plotly_plots[[1]]
 combined$x$data <- all_traces
 
-# Slider: each step turns on one month's traces and updates the title
-steps <- purrr::map(seq_along(unique_months), function(i) {
-  list(
-    method = "update",
-    label  = as.character(unique_months[i]),
-    args   = list(
-      list(visible = trace_month == i),
-      list(title = list(text = paste("Gas —", as.character(unique_months[i]))))
-    )
-  )
-})
+# One slider step per month
+tickers <- list()
+for (i in seq_along(unique_months)) {
+  month_name <- format(as.Date(unique_months[i]), "%B %Y")
+  show_specific_month <- trace_month == i
+  tickers[[i]] <- list(
+    method = "restyle",
+    args = list("visible", show_specific_month),
+    label = month_name)}
 
-combined$x$layout$title   <- list(text = paste("Gas —", as.character(unique_months[1])))
-combined$x$layout$sliders <- list(list(
-  active = 0,
-  currentvalue = list(prefix = "Month: "),
-  pad = list(t = 30),
-  steps = steps
-))
+# Attach the slider
+combined$x$layout$sliders <- list(
+  list(active = 0,
+    currentvalue = list(prefix = "Month: "),
+    x = 0.15,
+    y = 0.23,
+    steps = tickers))
+
+# Centered Titles for the two maps 
+combined$x$layout$annotations <- list(
+  list(text = "Average Regular Gas \n Price by State", 
+       x = 0.21, y = 0.73, 
+       xref = "paper", yref = "paper",
+       showarrow = FALSE, xanchor = "center"),
+  list(text = "Unemployment by by State", 
+       x = 0.79, y = 0.7, 
+       xref = "paper", yref = "paper",
+       showarrow = FALSE, xanchor = "center"))
 
 combined
 ```
