@@ -293,6 +293,15 @@ combined_data <- combined_data |>
 combined_data <- combined_data |>
   mutate(hours_per_fillup = 15 * MRA_Regular * weekly_hours / real_weekly_earnings)
 
+# Finally we are going to round our prices
+# Create a vector of all gasoline price variable names
+allprices <- c( "MNA_Regular", "MNA_Mid.Grade", "MNA_Premium", "MNA_Diesel",
+  "MRA_Regular", "MRA_Mid.Grade", "MRA_Premium", "MRA_Diesel")
+
+# Round all gasoline prices to two decimal places
+combined_data <- combined_data |>
+  mutate(across(all_of(allprices), ~ round(.x, 2)))
+
 # Check the final table for missing data and duplicate state-months.
 combined_data |> summarise(across(everything(), ~ sum(is.na(.x))))
 combined_data |> count(State, Year, Month) |> filter(n > 1)

@@ -1,0 +1,178 @@
+---
+title: "debug_map"
+format: html
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+
+```{r}
+library(tidyverse)
+library(sf)
+library(plotly)
+library(ggplot2)
+library(maps)
+library(mdsr)
+library(sf)
+library(ggspatial)
+library(leaflet)
+library(tidyverse)
+```
+
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+#Reading Data
+full_data <- read_csv("../data/combined_data.csv")
+
+# Create sf object for US counties
+states_map <- maps::map("state", region = ".",
+                       plot = FALSE, fill = TRUE)|>  st_as_sf()
+
+#Hard coded vector for states
+state_abre <- c( "alabama" = "AL", "arizona" = "AZ", "arkansas" = "AR",
+  "california" = "CA", "colorado" = "CO", "connecticut" = "CT",
+  "delaware" = "DE", "district of columbia" = "DC", "florida" = "FL",
+  "georgia" = "GA", "idaho" = "ID", "illinois" = "IL", "indiana" = "IN",
+  "iowa" = "IA", "kansas" = "KS", "kentucky" = "KY", "louisiana" = "LA",
+  "maine" = "ME", "maryland" = "MD", "massachusetts" = "MA", "michigan" = "MI",
+  "minnesota" = "MN", "mississippi" = "MS", "missouri" = "MO", "montana" = "MT",
+  "nebraska" = "NE", "nevada" = "NV", "new hampshire" = "NH",
+  "new jersey" = "NJ", "new mexico" = "NM", "new york" = "NY", 
+  "north carolina" = "NC", "north dakota" = "ND", "ohio" = "OH",
+  "oklahoma" = "OK", "oregon" = "OR", "pennsylvania" = "PA",
+  "rhode island" = "RI", "south carolina" = "SC", "south dakota" = "SD",
+  "tennessee" = "TN", "texas" = "TX", "utah" = "UT", "vermont" = "VT",
+  "virginia" = "VA", "washington" = "WA", "west virginia" = "WV",
+  "wisconsin" = "WI", "wyoming" = "WY")
+
+#Recode and leftjoin to create dataset with the location
+states_map <- states_map |>
+  mutate(State = recode(ID, !!!state_abre)) |> select(-ID)
+full_data_with_state <- left_join(states_map, full_data , by = "State")
+
+glimpse(full_data_with_state)
+
+full_data_with_state <- round(full_data_with_state, MRA_Regular, 2)
+
+#All unique months and filter which one we want
+unique_months <- sort(unique(full_data_with_state$month))
+month_variable = unique_months[2]
+full_data_with_state_month <- full_data_with_state |> 
+  filter(month == month_variable)
+
+
+
+
+Gasplot <- ggplot(full_data_with_state_month, 
+                  aes(geometry = geom, fill = MRA_Regular)) +
+  geom_sf() +
+  scale_fill_distiller(type = "seq", direction = 1) +
+  theme_void() +
+  labs(
+    title = "Gas",
+    subtitle = "Gas",
+    fill = "Real Prices",
+    caption = paste("Month:", as.character(month_variable)))
+
+Gasplot
+
+plotly::ggplotly(Gasplot)
+
+```
+
+You can add options to executable code like this 
+
+```{r}
+#Idea:
+
+# Read gas data
+full_data <- read_csv("../data/combined_data.csv")
+
+# Create sf object for US states
+states_map <- maps::map(
+  "state",
+  region = ".",
+  plot = FALSE,
+  fill = TRUE
+) |>
+  st_as_sf()
+
+# State abbreviations
+state_abre <- c(
+  "alabama" = "AL", "arizona" = "AZ", "arkansas" = "AR",
+  "california" = "CA", "colorado" = "CO", "connecticut" = "CT",
+  "delaware" = "DE", "district of columbia" = "DC", "florida" = "FL",
+  "georgia" = "GA", "idaho" = "ID", "illinois" = "IL",
+  "indiana" = "IN", "iowa" = "IA", "kansas" = "KS",
+  "kentucky" = "KY", "louisiana" = "LA", "maine" = "ME",
+  "maryland" = "MD", "massachusetts" = "MA", "michigan" = "MI",
+  "minnesota" = "MN", "mississippi" = "MS", "missouri" = "MO",
+  "montana" = "MT", "nebraska" = "NE", "nevada" = "NV",
+  "new hampshire" = "NH", "new jersey" = "NJ", "new mexico" = "NM",
+  "new york" = "NY", "north carolina" = "NC", "north dakota" = "ND",
+  "ohio" = "OH", "oklahoma" = "OK", "oregon" = "OR",
+  "pennsylvania" = "PA", "rhode island" = "RI",
+  "south carolina" = "SC", "south dakota" = "SD",
+  "tennessee" = "TN", "texas" = "TX", "utah" = "UT",
+  "vermont" = "VT", "virginia" = "VA", "washington" = "WA",
+  "west virginia" = "WV", "wisconsin" = "WI", "wyoming" = "WY"
+)
+
+# Rename state ID to abbreviation
+states_map <- states_map |>
+  mutate(State = recode(ID, !!!state_abre)) |>
+  select(-ID)
+
+# Join state map with gas data
+full_data_with_state <- left_join(
+  states_map,
+  full_data,
+  by = "State"
+)
+
+# Order months chronologically
+unique_months <- sort(unique(full_data_with_state$month))
+
+# Ensure months are ordered chronologically
+full_data_with_state <- full_data_with_state |>
+  mutate(
+    month = factor(
+      month,
+      levels = sort(unique(month))
+    )
+  )
+
+# Consistent color scale
+price_range <- range(
+  full_data_with_state$MRA_Regular,
+  na.rm = TRUE
+)
+
+# Interactive map with month slider
+gas_plot2 <- plot_ly(
+  data = full_data_with_state,
+  type = "choropleth",
+  locations = ~State,
+  locationmode = "USA-states",
+  z = ~MRA_Regular,
+  frame = ~month,
+  zmin = price_range[1],
+  zmax = price_range[2],
+  colorscale = "YlOrRd",
+  colorbar = list(title = "Real Prices")
+) |>
+  layout(
+    title = "Gas Prices by State",
+    geo = list(scope = "usa")
+  )
+
+gas_plot2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
