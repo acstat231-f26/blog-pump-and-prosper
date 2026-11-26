@@ -302,6 +302,14 @@ allprices <- c( "MNA_Regular", "MNA_Mid.Grade", "MNA_Premium", "MNA_Diesel",
 combined_data <- combined_data |>
   mutate(across(all_of(allprices), ~ round(.x, 2)))
 
+# Add geographic regions and divisions using R's built-in state data.
+combined_data <- combined_data |>
+  mutate(
+    Region = as.character(state.region[match(State, state.abb)]),
+    Division = as.character(state.division[match(State, state.abb)]),
+    Region = if_else(Region == "North Central", "Midwest", Region)
+  )
+
 # Check the final table for missing data and duplicate state-months.
 combined_data |> summarise(across(everything(), ~ sum(is.na(.x))))
 combined_data |> count(State, Year, Month) |> filter(n > 1)

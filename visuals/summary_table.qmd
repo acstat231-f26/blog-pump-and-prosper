@@ -1,0 +1,133 @@
+---
+title: "Changes in Real Gasoline Prices"
+format: html
+execute:
+  echo: false
+  message: false
+  warning: false
+---
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+library(DT)
+
+# Import the prepared comparison dataset.
+# Factors allow DT to generate categorical dropdown filters.
+comparison <- read_csv(
+  "../data/gas_price_comparisons.csv",
+  col_types = cols(
+    State = col_factor(),
+    Region = col_factor(),
+    start_month = col_factor(),
+    end_month = col_factor()
+  )
+)
+```
+
+## National and regional trends
+
+To examine the geographical impact of the 2026 gasoline price crisis, we compare monthly average prices for regular gasoline across all 50 states between January and September 2026. We focus on this period because it encompasses the most substantial nationwide price increases observed in our dataset. All prices are expressed in September 2026 dollars per gallon, accounting for changes in the national consumer price index.
+
+```{r}
+#| label: tbl-regional-summary
+#| tbl-cap: "Regional changes in real regular gasoline prices, January–September 2026"
+
+# Summarize the distribution of state-level price changes
+# within each geographical region during 2026.
+comparison |>
+  filter(
+    start_month == "2026-01",
+    end_month == "2026-09"
+  ) |>
+  group_by(Region) |>
+  summarise(
+    Mean = mean(pct_change) * 100,
+    Median = median(pct_change) * 100,
+    SD = sd(pct_change) * 100,
+    Min = min(pct_change) * 100,
+    Max = max(pct_change) * 100,
+    .groups = "drop"
+  ) |>
+  knitr::kable(
+    digits = 2,
+    col.names = c(
+      "Region", "Mean (%)", "Median (%)",
+      "SD (pp)", "Min (%)", "Max (%)"
+    )
+  )
+```
+
+Each state is weighted equally when calculating regional averages, irrespective of its population or gasoline consumption. Standard deviation (SD), measured in percentage points (pp), indicates how much price increases varied among states within each region. A smaller standard deviation indicates more uniform price changes.
+
+The gasoline price crisis of 2026 has affected the entire country. Between January and September, every state in the union experienced an increase in real regular gasoline prices, with the average state experiencing an increase of approximately 50.1%. However, the magnitude of these increases varied considerably. Utah experienced the largest increase at 73.9%, compared to Hawaii's 19.9%. At the regional level, the Midwest led with a mean price increase of 53.5%, followed by the West (51.7%), the South (49.0%), and the Northeast (45.0%).
+
+Notably, the Northeast experienced both the smallest and most uniform price increases, exhibiting the lowest regional mean and the smallest standard deviation of just 3.26 percentage points. No Northeastern state ranked among the ten largest price increases nationwide. Conversely, the West exhibited considerable variation, with a standard deviation of 15.56 percentage points, nearly five times that of the Northeast. The region contained the states with both the largest and smallest price increases, with six Western states ranking among the ten largest increases nationwide.
+
+## Explaining regional differences
+
+The Northeast's relatively uniform and moderate price increases may be attributable to several factors, including the geographical compactness of the region and the potential interconnectedness of its gasoline supply chains. Regional supply disruptions elsewhere may also have played a role. According to the [U.S. Energy Information Administration (2026)](https://www.eia.gov/todayinenergy/detail.php?id=67706), refinery outages and maintenance in Illinois, Indiana, and Colorado contributed to elevated gasoline prices in the Midwest and Rocky Mountain regions during the spring of 2026.
+
+Additionally, the Northeast entered 2026 with a relatively elevated average real gasoline price of $3.01 per gallon, compared to $2.72 in the Midwest and $2.71 in the South. Consequently, equivalent absolute price increases would translate into smaller percentage increases. While these factors may collectively help explain the observed regional differences, our analysis cannot establish a causal relationship.
+
+## Explore the data
+
+The interactive table below allows readers to investigate real gasoline price changes across different states, regions, and time periods, extending beyond our analysis of 2026.
+
+Use the filters at the top of the table to select states, regions, a start month, an end month, and price ranges. Leave the state filter blank to display all states in the selected regions. For a direct comparison across states, select exactly one start month and one end month. The end month must be later than the start month.
+
+Click any column heading to sort the results.
+
+Positive values indicate that gasoline became more expensive relative to the general consumer price level, while negative values indicate the opposite.
+
+```{r}
+#| label: interactive-gas-comparisons
+
+# Display the prepared dataset with categorical and price filters.
+# Prices are formatted as dollars, while proportional changes
+# are displayed as percentages.
+datatable(
+  comparison,
+  filter = "top",
+  rownames = FALSE,
+  colnames = c(
+    "State",
+    "Region",
+    "Start Month",
+    "End Month",
+    "Start Price",
+    "End Price",
+    "% Change"
+  ),
+  options = list(
+    pageLength = 10,
+    columnDefs = list(
+      list(targets = 6, searchable = FALSE)
+    ),
+    order = list(
+      list(2, "asc"),
+      list(3, "desc"),
+      list(0, "asc")
+    )
+  )
+) |>
+  formatCurrency(
+    c("start_price", "end_price"),
+    digits = 2
+  ) |>
+  formatPercentage(
+    "pct_change",
+    digits = 2
+  )
+```
+
+## Limitations
+
+January 2026 coincided with the lowest nationwide average real gasoline price observed in our dataset. Consequently, the magnitude of the reported increases is sensitive to our choice of starting month. Nevertheless, January provides a natural starting point for examining price changes during 2026.
+
+Within the broader dataset, October 2025 is excluded because CPI data are unavailable in our source dataset. November 2024 contains only observations beginning November 16, while March and May 2026 each have three missing days. Consequently, the corresponding monthly averages may not perfectly represent prices across the entirety of those months.
+
+Our inflation adjustment uses the national consumer price index rather than state-specific measures of consumer inflation. Moreover, our regional averages weight each state equally and therefore should not be interpreted as the average price increase experienced by individual consumers.
+
+Finally, our analysis describes changes between selected endpoints rather than fluctuations throughout the intervening period. 
