@@ -180,5 +180,19 @@
     "title": "Changes in Real Gasoline Prices",
     "section": "Limitations",
     "text": "Limitations\nJanuary 2026 coincided with the lowest nationwide average real gasoline price observed in our dataset. Consequently, the magnitude of the reported increases is sensitive to our choice of starting month. Nevertheless, January provides a natural starting point for examining price changes during 2026.\nWithin the broader dataset, October 2025 is excluded because CPI data are unavailable in our source dataset. November 2024 contains only observations beginning November 16, while March and May 2026 each have three missing days. Consequently, the corresponding monthly averages may not perfectly represent prices across the entirety of those months.\nOur inflation adjustment uses the national consumer price index rather than state-specific measures of consumer inflation. Moreover, our regional averages weight each state equally and therefore should not be interpreted as the average price increase experienced by individual consumers.\nFinally, our analysis describes changes between selected endpoints rather than fluctuations throughout the intervening period. Further research incorporating regional supply chains, refinery operations, taxation, and wholesale gasoline prices could help explain the geographical differences observed."
+  },
+  {
+    "objectID": "index.html#our-research-questions",
+    "href": "index.html#our-research-questions",
+    "title": "Pump and Prosper",
+    "section": "Our research questions",
+    "text": "Our research questions\n\nHow have real gasoline prices evolved across the United States?\nWhich states and regions have experienced the largest increases?\nHow have changes in gasoline prices affected affordability relative to earnings?\n\n\n\n\n\n\n\n\n\nFigure 1: Monthly average real regular gasoline prices across the 50 states."
+  },
+  {
+    "objectID": "index.html#explore-our-findings",
+    "href": "index.html#explore-our-findings",
+    "title": "Pump and Prosper",
+    "section": "Explore our findings",
+    "text": "Explore our findings\n\nThe evolution of gasoline prices\nExplore our interactive maps.\n\n\nRegional differences\nCompare gasoline price changes across states and regions.\n\n\nGasoline affordability"
   }
 ]
