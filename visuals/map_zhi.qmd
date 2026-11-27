@@ -27,6 +27,7 @@ library(tidyverse)
 When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
 
 ```{r}
+
 #Reading Data
 full_data <- read_csv("../data/combined_data.csv")
 
@@ -35,26 +36,34 @@ states_map <- maps::map("state", region = ".",
                        plot = FALSE, fill = TRUE)|>  st_as_sf()
 
 #Hard coded vector for states
-state_abre <- c( "alabama" = "AL", "arizona" = "AZ", "arkansas" = "AR",
-  "california" = "CA", "colorado" = "CO", "connecticut" = "CT",
-  "delaware" = "DE", "district of columbia" = "DC", "florida" = "FL",
-  "georgia" = "GA", "idaho" = "ID", "illinois" = "IL", "indiana" = "IN",
-  "iowa" = "IA", "kansas" = "KS", "kentucky" = "KY", "louisiana" = "LA",
-  "maine" = "ME", "maryland" = "MD", "massachusetts" = "MA", "michigan" = "MI",
-  "minnesota" = "MN", "mississippi" = "MS", "missouri" = "MO", "montana" = "MT",
-  "nebraska" = "NE", "nevada" = "NV", "new hampshire" = "NH",
-  "new jersey" = "NJ", "new mexico" = "NM", "new york" = "NY", 
-  "north carolina" = "NC", "north dakota" = "ND", "ohio" = "OH",
-  "oklahoma" = "OK", "oregon" = "OR", "pennsylvania" = "PA",
-  "rhode island" = "RI", "south carolina" = "SC", "south dakota" = "SD",
-  "tennessee" = "TN", "texas" = "TX", "utah" = "UT", "vermont" = "VT",
-  "virginia" = "VA", "washington" = "WA", "west virginia" = "WV",
-  "wisconsin" = "WI", "wyoming" = "WY")
+state_names <- c(
+  "AL" = "Alabama", "AZ" = "Arizona", "AR" = "Arkansas", "CA" = "California", 
+  "CO" = "Colorado", "CT" = "Connecticut", "DE" = "Delaware", 
+  "DC" = "District of Columbia", "FL" = "Florida", "GA" = "Georgia", 
+  "ID" = "Idaho", "IL" = "Illinois", "IN" = "Indiana", "IA" = "Iowa", 
+  "KS" = "Kansas", "KY" = "Kentucky", "LA" = "Louisiana", "ME" = "Maine",
+  "MD" = "Maryland", "MA" = "Massachusetts", "MI" = "Michigan", 
+  "MN" = "Minnesota", "MS" = "Mississippi", "MO" = "Missouri",
+  "MT" = "Montana", "NE" = "Nebraska", "NV" = "Nevada",
+  "NH" = "New Hampshire", "NJ" = "New Jersey", "NM" = "New Mexico",
+  "NY" = "New York", "NC" = "North Carolina", "ND" = "North Dakota",
+  "OH" = "Ohio", "OK" = "Oklahoma", "OR" = "Oregon", "PA" = "Pennsylvania", 
+  "RI" = "Rhode Island", "SC" = "South Carolina", "SD" = "South Dakota",
+  "TN" = "Tennessee", "TX" = "Texas", "UT" = "Utah", "VT" = "Vermont", 
+  "VA" = "Virginia", "WA" = "Washington", "WV" = "West Virginia", 
+  "WI" = "Wisconsin", "WY" = "Wyoming"
+)
+
+#Recode state names in full_data from initials to full names
+full_data <- full_data |>
+  mutate(State = recode(State, !!!state_names))
 
 #Recode and leftjoin to create dataset with the location
 states_map <- states_map |>
-  mutate(State = recode(ID, !!!state_abre)) |> select(-ID)
-full_data_with_state <- left_join(states_map, full_data , by = "State")
+  mutate(State = stringr::str_to_title(ID)) |> 
+  select(-ID)
+
+full_data_with_state <- left_join(states_map, full_data, by = "State")
 
 #All unique months (chronologically) and filter which one we want
 unique_months <- sort(unique(full_data_with_state$month))
@@ -65,7 +74,11 @@ full_data_with_state_specific_month <- full_data_with_state |>
 
 #Create a plot for the specific month
 Gasplot <- ggplot(full_data_with_state_specific_month, 
-                  aes(geometry = geom, fill = MRA_Regular)) +
+                  aes(geometry = geom, fill = MRA_Regular,
+                      #This change hover label
+                      text = paste0(
+                        "State: ", State,
+                        "<br>Gas Price: $", round(MRA_Regular, 3)))) +
   geom_sf() +
   scale_fill_distiller(type = "seq", direction = 1) +
   theme_void() +
@@ -75,7 +88,8 @@ Gasplot <- ggplot(full_data_with_state_specific_month,
     fill = "Price ($/gal)",
     caption = paste("Month:", month_name))
 
-plotly::ggplotly(Gasplot)
+plotly::ggplotly(Gasplot, tooltip = "text")
+
 
 ```
 
@@ -101,7 +115,10 @@ for (i in seq_along(unique_months)) {
     filter(month == month_variable)
   #Creating plot
   Gasplot <- ggplot(full_data_with_state_specific_month, 
-                    aes(geometry = geom, fill = MRA_Regular)) +
+                    aes(geometry = geom, fill = MRA_Regular,
+                        text = paste0(
+                          "State: ", State,
+                          "<br>Gas Price: $", round(MRA_Regular, 3)))) +
     geom_sf() +
     scale_fill_distiller(type = "seq", direction = 1, limits = price_limits) +
     theme_void() +
@@ -116,10 +133,10 @@ for (i in seq_along(unique_months)) {
 # Replicating the list but for plotly instead of ggplot
 plotly_plots <- list()
 for (i in seq_along(month_plots)) {
-  plotly_plots[[i]] <- plotly_build(ggplotly(month_plots[[i]]))}
+  plotly_plots[[i]] <- plotly_build(ggplotly(month_plots[[i]], tooltip = "text"))}
 
 # This part is probably the most confusing, so I had to learn a bit about how
-# Plotly works. Each month's plot in plotly_plots has its own set of "traces", 
+# Plotly works. Each month's plotly plot has its own set of "traces", 
 # that together produces the plot. We need to group these traces so that Plotly 
 # knows what to display for each month.
 
@@ -166,8 +183,6 @@ combined$x$layout$sliders <- list(
     steps = tickers))
 
 combined
-
-
 ```
 
 
@@ -188,23 +203,33 @@ for (i in seq_along(unique_months)) {
     filter(month == month_variable)
   # Left map: Gas Prices (blue)
   Gasplot <- ggplot(full_data_with_state_specific_month,
-                    aes(geometry = geom, fill = MRA_Regular)) +
+                    aes(geometry = geom, fill = MRA_Regular,
+                        text = paste0(
+                          "State: ", State,
+                          "<br>Gas Price: $", round(MRA_Regular, 3)))) +
     geom_sf() +
     scale_fill_distiller(type = "seq", direction = 1, limits = gas_limits) +
     theme_void() +
     labs(fill = "Gas ($/gal)")
   # Right map: Unemployment Rate (red)
   Unempplot <- ggplot(full_data_with_state_specific_month,
-                      aes(geometry = geom, fill = unemployment_rate)) +
+                      aes(geometry = geom, fill = unemployment_rate,
+                          text = paste0(
+                            "State: ", State,
+                            "<br>Unemployment Rate: ",
+                            round(unemployment_rate, 2), "%"))) +
     geom_sf() +
     scale_fill_distiller(type = "seq", palette = "Reds", direction = 1,
                          limits = unemp_limits) +
     theme_void() +
     labs(fill = "Unemployment (%)")
-  
+
   # Side-by-side figure for one month
   fig <- plotly_build(
-    subplot(ggplotly(Gasplot), ggplotly(Unempplot), nrows = 1, margin = 0.08))
+    subplot(
+      ggplotly(Gasplot, tooltip = "text"),
+      ggplotly(Unempplot, tooltip = "text"),
+      nrows = 1, margin = 0.08))
   # Adjusting position of the legends by finding legend from the traces 
   # and then changing x position.
   bar_x <- c(0.42, 1)
