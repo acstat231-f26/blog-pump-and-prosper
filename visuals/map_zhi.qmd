@@ -1,6 +1,12 @@
 ---
 title: "debug_map"
 format: html
+execute:
+  freeze: true
+  echo: false
+  warning: false
+  message: false
+  error: false
 ---
 
 ## Quarto
