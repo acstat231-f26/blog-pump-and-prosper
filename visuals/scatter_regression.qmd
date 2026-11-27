@@ -1,0 +1,62 @@
+---
+title: "Gasoline Affordability and Unemployment"
+format: html
+execute:
+  echo: false
+  message: false
+  warning: false
+---
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+library(plotly)
+
+# Use a single month so each state appears exactly once.
+sept <- read_csv(
+  "../data/combined_data.csv",
+  show_col_types = FALSE
+) |>
+  filter(month == as.Date("2026-09-01")) |>
+  mutate(
+    state_name = state.name[match(State, state.abb)],
+    hover_label = paste0(
+      state_name, " (", Region, ")",
+      "<br>Unemployment rate: ", unemployment_rate, "%",
+      "<br>Hours for 15 gallons: ", round(hours_per_fillup, 2),
+      "<br>Real gas price: $", MRA_Regular, "/gallon"
+    )
+  )
+```
+
+To see whether states with weaker labor markets also faced a heavier gasoline burden, we compare each state's unemployment rate with the number of hours of work needed to buy 15 gallons of regular gasoline in September 2026. The fitted regression line is nearly flat, suggesting little relationship between unemployment and gasoline affordability across states. Hover over any point to see the state and its values.
+
+```{r}
+#| label: fig-scatter-unemployment
+#| fig-cap: "Unemployment rate and hours of work needed to buy 15 gallons of regular gasoline, by state, September 2026. The line shows the fitted linear regression with a 95% confidence band."
+
+scatter_plot <- ggplot(
+  sept,
+  aes(x = unemployment_rate, y = hours_per_fillup)
+) +
+  geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    color = "gray30",
+    fill = "gray80"
+  ) +
+  geom_point(
+    aes(color = Region, text = hover_label),
+    size = 2.5,
+    alpha = 0.85
+  ) +
+  labs(
+    x = "Unemployment rate (%)",
+    y = "Hours of work for 15 gallons",
+    color = "Region"
+  ) +
+  theme_minimal()
+
+ggplotly(scatter_plot, tooltip = "text")
+```

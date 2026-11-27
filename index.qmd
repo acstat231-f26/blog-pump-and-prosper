@@ -60,3 +60,5 @@ combined_data |>
 [Compare gasoline price changes across states and regions](visuals/summary_table.qmd).
 
 ### Gasoline affordability
+
+[See how affordability relates to unemployment and region](visuals/scatter_regression.qmd).
