@@ -3,24 +3,26 @@ project:
   output-dir: docs
   render:
     - index.qmd
-    - another-page.qmd
-    - yet-another-page.qmd
-    - visuals/*.qmd
+    - visuals/map_zhi.qmd
+    - visuals/summary_table.qmd
+    - visuals/scatter_regression.qmd
 # Can customize this section with options from the following page:
 # https://quarto.org/docs/websites/website-navigation.html
 website:
-  title: "Website title"
+  title: "Pump and Prosper"
   navbar:
+    logo: images/PUMP_PROSPER.png
     left:
-      - href: index.qmd # Must be included as index.qmd
-        text: "Home"
-        icon: house # Get icon names: https://icons.getbootstrap.com/?q=home
-      # Add or remove additional pages below in desired order of appearance
-      - another-page.qmd
-      - href: yet-another-page.qmd
-        text: "Yet another page with a custom label and icon"
-        icon: arrow-through-heart-fill
-        
+      - text: "Gasoline Prices"
+        menu:
+          - href: visuals/map_zhi.qmd
+            text: "Interactive Maps"
+          - href: visuals/summary_table.qmd
+            text: "Regional Comparisons"
+      - text: "Affordability"
+        menu:
+          - href: visuals/scatter_regression.qmd
+            text: "Affordability and Unemployment"
 format:
   html:
     date: last-modified
@@ -40,9 +42,9 @@ format:
     # See https://quarto.org/docs/output-formats/html-code.html#highlighting
     highlight-style: arrow
     # See https://quarto.org/docs/output-formats/html-themes.html
-    theme: 
-      light: minty
-      dark: superhero
+    theme:
+      light: sketchy
+      dark: darkly
     fontsize: 13pt
     # If you want to customize beyond a built-in theme, you can add content to
     # styles.css (currently empty). See the following page for more info:

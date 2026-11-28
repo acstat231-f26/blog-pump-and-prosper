@@ -6,6 +6,7 @@ author:
   - "Tetsuya Tanaka"
   - "Zhi Heng Chen"
 abstract: "TEST"
+nocite: "@*"
 ---
 
 ```{r}
@@ -22,7 +23,13 @@ combined_data <- read_csv(
 
 ## Introduction
 
+![](images/PUMP_PROSPER.png){width=350px fig-align="center"}
+
+NEED TEXT HERE
+
 ## Our research questions
+
+[REFINE THESE TO MATCH VISUALS]
 
 - How have real gasoline prices evolved across the United States?
 - Which states and regions have experienced the largest increases?
@@ -61,4 +68,51 @@ combined_data |>
 
 ### Gasoline affordability
 
-[See how affordability relates to unemployment and region](visuals/scatter_regression.qmd).
+## Contributors
+
+:::: {layout-ncol=3}
+
+::: {#declan}
+
+![Declan DuBois](images/DECLANpump.png){width=70%}
+
+- Scraped Gas Price and Federal Reserve Data
+- Coded interactive gas price summary table
+- Created visuals and formatting for Blog
+
+:::
+
+::: {#tetsuya}
+
+![Tetsuya Tanaka](images/tetsuyapump.png){width=70%}
+
+- Contribution 1
+- Contribution 2
+- Contribution 3
+
+:::
+
+::: {#zhi}
+
+![Zhi Heng Chen](images/zhihengpump.png){width=70%}
+
+- Contribution 1
+- Contribution 2
+- Contribution 3
+
+:::
+
+::::
+
+## Software and Resources
+
+Our approach to data wrangling, statistical analysis, and visualization draws upon the methods introduced in *Modern Data Science with R* [@mdsr].
+
+Data wrangling and analysis were conducted in R using tidyverse. Visualizations were developed using ggplot2, plotly, sf, and maps. Interactive tables were constructed using DT.
+
+The website was developed using Quarto.
+
+## References
+
+::: {#refs}
+:::

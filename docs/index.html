@@ -9,9 +9,9 @@
 <meta name="author" content="Declan DuBois">
 <meta name="author" content="Tetsuya Tanaka">
 <meta name="author" content="Zhi Heng Chen">
-<meta name="dcterms.date" content="2026-11-27">
+<meta name="dcterms.date" content="2026-11-28">
 
-<title>Pump and Prosper – Website title</title>
+<title>Pump and Prosper</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -27,7 +27,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -48,9 +68,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-463223ff145b16e1915c5efb16cbe55d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-bfb8caade10861aec8bfe5c4cd71488a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-463223ff145b16e1915c5efb16cbe55d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-9e98cc9797e268ad7c997874ebe6903a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-77a3ba3ed36a294646b084da50534689.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-9e98cc9797e268ad7c997874ebe6903a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -252,8 +272,12 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./images/PUMP_PROSPER.png" alt="" class="navbar-logo light-content">
+    <img src="./images/PUMP_PROSPER.png" alt="" class="navbar-logo dark-content">
+    </a>
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Website title</span>
+    <span class="navbar-title">Pump and Prosper</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -262,20 +286,32 @@ ul.task-list li input[type="checkbox"] {
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> <i class="bi bi-house" role="img">
-</i> 
-<span class="menu-text">Home</span></a>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-gasoline-prices" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Gasoline Prices</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-gasoline-prices">    
+        <li>
+    <a class="dropdown-item" href="./visuals/map_zhi.html">
+ <span class="dropdown-text">Interactive Maps</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./another-page.html"> 
-<span class="menu-text">Another page</span></a>
+        <li>
+    <a class="dropdown-item" href="./visuals/summary_table.html">
+ <span class="dropdown-text">Regional Comparisons</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./yet-another-page.html"> <i class="bi bi-arrow-through-heart-fill" role="img">
-</i> 
-<span class="menu-text">Yet another page with a custom label and icon</span></a>
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-affordability" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Affordability</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-affordability">    
+        <li>
+    <a class="dropdown-item" href="./visuals/scatter_regression.html">
+ <span class="dropdown-text">Affordability and Unemployment</span></a>
   </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -301,6 +337,9 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#regional-differences" id="toc-regional-differences" class="nav-link" data-scroll-target="#regional-differences">Regional differences</a></li>
   <li><a href="#gasoline-affordability" id="toc-gasoline-affordability" class="nav-link" data-scroll-target="#gasoline-affordability">Gasoline affordability</a></li>
   </ul></li>
+  <li><a href="#contributors" id="toc-contributors" class="nav-link" data-scroll-target="#contributors">Contributors</a></li>
+  <li><a href="#software-and-resources" id="toc-software-and-resources" class="nav-link" data-scroll-target="#software-and-resources">Software and Resources</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -330,7 +369,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Last updated</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 27, 2026</p>
+      <p class="date">November 28, 2026</p>
     </div>
   </div>
   
@@ -350,9 +389,16 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/PUMP_PROSPER.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="350"></p>
+</figure>
+</div>
+<p>NEED TEXT HERE</p>
 </section>
 <section id="our-research-questions" class="level2">
 <h2 class="anchored" data-anchor-id="our-research-questions">Our research questions</h2>
+<p>[REFINE THESE TO MATCH VISUALS]</p>
 <ul>
 <li>How have real gasoline prices evolved across the United States?</li>
 <li>Which states and regions have experienced the largest increases?</li>
@@ -385,10 +431,93 @@ Figure&nbsp;1: Monthly average real regular gasoline prices across the 50 states
 </section>
 <section id="gasoline-affordability" class="level3">
 <h3 class="anchored" data-anchor-id="gasoline-affordability">Gasoline affordability</h3>
-<p><a href="./visuals/scatter_regression.html">See how affordability relates to unemployment and region</a>.</p>
-
-
 </section>
+</section>
+<section id="contributors" class="level2">
+<h2 class="anchored" data-anchor-id="contributors">Contributors</h2>
+<div class="quarto-layout-panel" data-layout-ncol="3">
+<div class="quarto-layout-row">
+<div id="declan" class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/DECLANpump.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Declan DuBois</figcaption>
+</figure>
+</div>
+<ul>
+<li>Scraped Gas Price and Federal Reserve Data</li>
+<li>Coded interactive gas price summary table</li>
+<li>Created visuals and formatting for Blog</li>
+</ul>
+</div>
+<div id="tetsuya" class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tetsuyapump.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Tetsuya Tanaka</figcaption>
+</figure>
+</div>
+<ul>
+<li>Contribution 1</li>
+<li>Contribution 2</li>
+<li>Contribution 3</li>
+</ul>
+</div>
+<div id="zhi" class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/zhihengpump.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Zhi Heng Chen</figcaption>
+</figure>
+</div>
+<ul>
+<li>Contribution 1</li>
+<li>Contribution 2</li>
+<li>Contribution 3</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="software-and-resources" class="level2">
+<h2 class="anchored" data-anchor-id="software-and-resources">Software and Resources</h2>
+<p>Our approach to data wrangling, statistical analysis, and visualization draws upon the methods introduced in <em>Modern Data Science with R</em> <span class="citation" data-cites="mdsr">(<a href="#ref-mdsr" role="doc-biblioref">Baumer et al. 2021</a>)</span>.</p>
+<p>Data wrangling and analysis were conducted in R using tidyverse. Visualizations were developed using ggplot2, plotly, sf, and maps. Interactive tables were constructed using DT.</p>
+<p>The website was developed using Quarto.</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-aaa" class="csl-entry" role="listitem">
+American Automobile Association (n.d.). <span>“<a href="https://gasprices.aaa.com/"><span>AAA Gas Prices</span></a>.”</span>
+</div>
+<div id="ref-mdsr" class="csl-entry" role="listitem">
+Baumer, B. S., Kaplan, D. T., and Horton, N. J. (2021), <em><a href="https://mdsr-book.github.io/mdsr2e/">Modern data science with <span>R</span></a></em>, Chapman; Hall/CRC.
+</div>
+<div id="ref-gasprices" class="csl-entry" role="listitem">
+Greathouse, J. A. (2026), <span>“<a href="https://github.com/jgreathouse9/AAAGas/blob/main/Prices/MasterGas.csv"><span>AAAGas</span>: Daily state-level gasoline prices</a>,”</span> GitHub.
+</div>
+<div id="ref-blscpi" class="csl-entry" role="listitem">
+U.S. Bureau of Labor Statistics (2026a), <span>“<a href="https://fred.stlouisfed.org/series/CPIAUCNS">Consumer price index for all urban consumers: All items in u.s. City average</a>,”</span> Federal Reserve Bank of St. Louis, FRED.
+</div>
+<div id="ref-blsunemployment" class="csl-entry" role="listitem">
+U.S. Bureau of Labor Statistics (2026e), <span>“<a href="https://fred.stlouisfed.org/series/CAUR">State unemployment rates</a>,”</span> Federal Reserve Bank of St. Louis, FRED.
+</div>
+<div id="ref-blsearnings" class="csl-entry" role="listitem">
+U.S. Bureau of Labor Statistics (2026b), <span>“<a href="https://fred.stlouisfed.org/series/SMU06000000500000011">Average weekly earnings of all employees: Total private</a>,”</span> Federal Reserve Bank of St. Louis, FRED.
+</div>
+<div id="ref-blshours" class="csl-entry" role="listitem">
+U.S. Bureau of Labor Statistics (2026c), <span>“<a href="https://fred.stlouisfed.org/series/SMU06000000500000002">Average weekly hours of all employees: Total private</a>,”</span> Federal Reserve Bank of St. Louis, FRED.
+</div>
+<div id="ref-blsparticipation" class="csl-entry" role="listitem">
+U.S. Bureau of Labor Statistics (2026d), <span>“<a href="https://fred.stlouisfed.org/series/LBSNSA06">State labor force participation rates</a>,”</span> Federal Reserve Bank of St. Louis, FRED.
+</div>
+<div id="ref-eia2026" class="csl-entry" role="listitem">
+U.S. Energy Information Administration (2026), <span>“The regional differences in gasoline prices this memorial day,”</span> Available at <a href="https://www.eia.gov/todayinenergy/detail.php?id=67706">https://www.eia.gov/todayinenergy/detail.php?id=67706</a>.
+</div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->

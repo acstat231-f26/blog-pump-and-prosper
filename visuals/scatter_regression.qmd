@@ -13,44 +13,60 @@ execute:
 library(tidyverse)
 library(plotly)
 
-# Use a single month so each state appears exactly once.
-sept <- read_csv(
+# Load the combined data and keep only September 2026,
+# so each state appears once.
+combined_data <- read_csv(
   "../data/combined_data.csv",
   show_col_types = FALSE
-) |>
-  filter(month == as.Date("2026-09-01")) |>
-  mutate(
-    state_name = state.name[match(State, state.abb)],
-    hover_label = paste0(
-      state_name, " (", Region, ")",
-      "<br>Unemployment rate: ", unemployment_rate, "%",
-      "<br>Hours for 15 gallons: ", round(hours_per_fillup, 2),
-      "<br>Real gas price: $", MRA_Regular, "/gallon"
-    )
-  )
+)
+
+sept <- combined_data |>
+  filter(month == "2026-09-01") |>
+  mutate(for_hover = paste0(State, ": ",
+                            unemployment_rate, "% unemployment, ",
+                            round(hours_per_fillup, 1), " hours"),
+         for_hover_gas = paste0(State, ": $",
+                                MRA_Regular, "/gallon, ",
+                                unemployment_rate, "% unemployment"))
 ```
 
-To see whether states with weaker labor markets also faced a heavier gasoline burden, we compare each state's unemployment rate with the number of hours of work needed to buy 15 gallons of regular gasoline in September 2026. The fitted regression line is nearly flat, suggesting little relationship between unemployment and gasoline affordability across states. Hover over any point to see the state and its values.
+## Gas prices and unemployment
+
+Our main question is whether states with higher gasoline prices also have higher unemployment. Here, each point is a state in September 2026, colored by region. The x-axis is the real price of regular gasoline, and the y-axis is the unemployment rate. The gray line is a straight-line trend fitted across all 50 states, and the shaded band shows the uncertainty around it.
+
+```{r}
+#| label: fig-scatter-gas-unemployment
+#| fig-cap: "Real price of regular gasoline and unemployment rate, by state, September 2026. The gray line shows a straight-line trend, and the shaded band shows the uncertainty around it."
+
+# Scatterplot with a straight-line trend and uncertainty band
+gas_plot <- ggplot(sept, aes(x = MRA_Regular, y = unemployment_rate)) +
+  geom_smooth(method = "lm", color = "gray30", fill = "gray80") +
+  geom_point(aes(color = Region, text = for_hover_gas)) +
+  labs(
+    x = "Real price of regular gasoline ($ per gallon)",
+    y = "Unemployment rate (%)",
+    color = "Region"
+  ) +
+  theme_minimal()
+
+# Make the plot interactive
+ggplotly(gas_plot, tooltip = "text")
+```
+
+The trend line rises: states with more expensive gas tend to have somewhat higher unemployment, though the points are widely scattered around the line, so the relationship is weak. Because this compares states at a single point in time, it shows an association, not that higher gas prices cause higher unemployment.
+
+## Gasoline affordability and unemployment
+
+To see whether states with weaker labor markets also faced a heavier gasoline burden, we compare each state's unemployment rate with the number of hours of work needed to buy 15 gallons of regular gasoline in September 2026. Each point is a state, colored by region, and the gray line is a straight-line trend fitted across all states, with a shaded band showing the uncertainty around it. The trend line stays fairly flat, suggesting little relationship between unemployment and gasoline affordability across states. Hover over any point to see the state and its values.
 
 ```{r}
 #| label: fig-scatter-unemployment
-#| fig-cap: "Unemployment rate and hours of work needed to buy 15 gallons of regular gasoline, by state, September 2026. The line shows the fitted linear regression with a 95% confidence band."
+#| fig-cap: "Unemployment rate and hours of work needed to buy 15 gallons of regular gasoline, by state, September 2026. The gray line shows a straight-line trend, and the shaded band shows the uncertainty around it."
 
-scatter_plot <- ggplot(
-  sept,
-  aes(x = unemployment_rate, y = hours_per_fillup)
-) +
-  geom_smooth(
-    method = "lm",
-    formula = y ~ x,
-    color = "gray30",
-    fill = "gray80"
-  ) +
-  geom_point(
-    aes(color = Region, text = hover_label),
-    size = 2.5,
-    alpha = 0.85
-  ) +
+# Scatterplot with a straight-line trend and uncertainty band
+scatter_plot <- ggplot(sept, aes(x = unemployment_rate, y = hours_per_fillup)) +
+  geom_smooth(method = "lm", color = "gray30", fill = "gray80") +
+  geom_point(aes(color = Region, text = for_hover)) +
   labs(
     x = "Unemployment rate (%)",
     y = "Hours of work for 15 gallons",
@@ -58,5 +74,6 @@ scatter_plot <- ggplot(
   ) +
   theme_minimal()
 
+# Make the plot interactive
 ggplotly(scatter_plot, tooltip = "text")
 ```

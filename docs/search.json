@@ -1,129 +1,10 @@
 [
   {
-    "objectID": "another-page.html",
-    "href": "another-page.html",
-    "title": "Another page",
+    "objectID": "visuals/scatter_regression.html",
+    "href": "visuals/scatter_regression.html",
+    "title": "Gasoline Affordability and Unemployment",
     "section": "",
-    "text": "This is just another page that can be linked! You are not required to include more than just index.qmd, but you are welcome to make content on different pages, if desired. This may help with managing GitHub commits, as well.\nEach page can have it’s own list of references based on what you cite. For example, did you know that good graphs “have a clear purpose, show the data clearly, and make the message obvious”? (Vandemeulebroecke et al. 2019).\n\n\n\n\nReferences\n\nVandemeulebroecke, M., Baillie, M., Carr, D., Kanitra, L., Margolskee, A., Wright, A., and Magnusson, B. (2019), “How can we make better graphs? An initiative to increase the graphical expertise and productivity of quantitative scientists,” Pharmaceutical Statistics, 18, 106–114. https://doi.org/10.1002/pst.1912."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Title",
-    "section": "",
-    "text": "This is an example of a Quarto website. All the Quarto markdown features we learned for formatting text, adding headings and subheadings, adding code and output, adding labels and captions and whatnot work as usual.\n\n\nThe website project folder/repo will contain the following files, at a minimum:\n\n_quarto.yml: A configuration file that controls the YAML content, similar to what we typically see at the top of our qmd files.\nUse this file to add or remove additional subpages, change the overall website title, customize the navigation bar contents and layout, change the website theme, and set any other default formatting options such as code chunk options.\nindex.qmd: This is the landing page of your website. This file must be called index.qmd and must be located in the root directory of the project.\nUse this page, at a minimum, to introduce your project. From there you can either fully include the contents of the project or use additional qmd files to create subpages of your website (perhaps explaining the structure of the website to the user on this landing page).\nbib folder: Contains the bibliography file, which you should edit to include your resources, and a .csl file that tells Quarto how to format in-text citations and the bibliography list according to the American Statistical Association citation style.\ndocs folder: The rendered content of the website will be located here.\nstyles.css: This file is currently empty, but if you want to modify or replace the default theme, do so here using CSS. Students in the past have used custom color palettes or custom fonts, for example.\nAdditional qmd files: If you want to add subpages with their own content, create new qmd files in your root directory to do so, being sure to include them in the list of contents in your _quarto.yml file.\n\n\n\nSimilar to the Shiny project, you will need to organize your wrangling scripts and data. You may also have other images or figures saved for displaying in your blog that will also need to be organized. Here are recommendations for organization.\n\nscripts: Store wrangling scripts in their own folder\ndata: Store datasets in their own folder, being sure to separate raw data from clean/processed data. You can do this in one of two ways: two separate data folders in the root directory (e.g., raw-data and data) or two subfolders of a single data folder (subfolders called, for example, raw, processed).\nimages: Organize saved images or figures together in their own folder. Make sure you keep track of the source of the images or figures and credit the sources in some way in your page (include source in caption and/or link image to source)\n\n\n\n\n\n\nEdit contents of any files. Each new qmd file is a self-contained environment, so you will need to load any necessary packages and datasets for rendering that particular file at the top of that file.\nAfter updating a qmd file, Render the qmd file. Note that the rendered files (.html etc) are in the docs folder. Keep them there!\nCommit changes to website and PUSH to publish those changes."
-  },
-  {
-    "objectID": "index.html#website-project-structure",
-    "href": "index.html#website-project-structure",
-    "title": "Title",
-    "section": "",
-    "text": "The website project folder/repo will contain the following files, at a minimum:\n\n_quarto.yml: A configuration file that controls the YAML content, similar to what we typically see at the top of our qmd files.\nUse this file to add or remove additional subpages, change the overall website title, customize the navigation bar contents and layout, change the website theme, and set any other default formatting options such as code chunk options.\nindex.qmd: This is the landing page of your website. This file must be called index.qmd and must be located in the root directory of the project.\nUse this page, at a minimum, to introduce your project. From there you can either fully include the contents of the project or use additional qmd files to create subpages of your website (perhaps explaining the structure of the website to the user on this landing page).\nbib folder: Contains the bibliography file, which you should edit to include your resources, and a .csl file that tells Quarto how to format in-text citations and the bibliography list according to the American Statistical Association citation style.\ndocs folder: The rendered content of the website will be located here.\nstyles.css: This file is currently empty, but if you want to modify or replace the default theme, do so here using CSS. Students in the past have used custom color palettes or custom fonts, for example.\nAdditional qmd files: If you want to add subpages with their own content, create new qmd files in your root directory to do so, being sure to include them in the list of contents in your _quarto.yml file.\n\n\n\nSimilar to the Shiny project, you will need to organize your wrangling scripts and data. You may also have other images or figures saved for displaying in your blog that will also need to be organized. Here are recommendations for organization.\n\nscripts: Store wrangling scripts in their own folder\ndata: Store datasets in their own folder, being sure to separate raw data from clean/processed data. You can do this in one of two ways: two separate data folders in the root directory (e.g., raw-data and data) or two subfolders of a single data folder (subfolders called, for example, raw, processed).\nimages: Organize saved images or figures together in their own folder. Make sure you keep track of the source of the images or figures and credit the sources in some way in your page (include source in caption and/or link image to source)"
-  },
-  {
-    "objectID": "index.html#workflow",
-    "href": "index.html#workflow",
-    "title": "Title",
-    "section": "",
-    "text": "Edit contents of any files. Each new qmd file is a self-contained environment, so you will need to load any necessary packages and datasets for rendering that particular file at the top of that file.\nAfter updating a qmd file, Render the qmd file. Note that the rendered files (.html etc) are in the docs folder. Keep them there!\nCommit changes to website and PUSH to publish those changes."
-  },
-  {
-    "objectID": "index.html#cross-referencing",
-    "href": "index.html#cross-referencing",
-    "title": "Title",
-    "section": "Cross-referencing",
-    "text": "Cross-referencing\nYou should use code chunk labels and in-text cross-references for figures and tables (see the Knitr examples at the link).\nQuarto additionally provides similar syntax for creating labels for and cross-referencing equations, creating labels for and cross-referencing sections, and using code chunk options of the form lst-label: lst-your-listing-label and lst-cap: Code chunk caption to be able to cross-reference displayed code chunks (or “listings”) using the syntax @lst-your-listing-label within the text.\nThese are not required for this project but are good practice."
-  },
-  {
-    "objectID": "index.html#creating-and-linking-to-subpages",
-    "href": "index.html#creating-and-linking-to-subpages",
-    "title": "Title",
-    "section": "Creating and linking to subpages",
-    "text": "Creating and linking to subpages\nYou can create subpages by simply creating new qmd files. Any subpage you want to include on the website should be added to the website navigation list in the _quarto.yml file.\nYou can link to another page on the website by using just the filepath to the corresponding qmd file. You can also link directly to a section of a subpage."
-  },
-  {
-    "objectID": "index.html#creating-the-bibliography",
-    "href": "index.html#creating-the-bibliography",
-    "title": "Title",
-    "section": "Creating the bibliography",
-    "text": "Creating the bibliography\nOne of the new challenges of Quarto, relative to a Word or Google doc, is learning how to build a bibliography and use the specified citation keys to write in-text citations.\nAll items you plan to cite should be added to the library.bib bibliography file, which you can open from within RStudio and edit just like any other text file. You should use standard bibtex syntax for each entry, following the examples provided. If the resource you are using doesn’t already provide a way to generate a bibtex entry, I recommend using zoterobib to generate the appropriate syntax (must change the Bibliography style to “BibTeX generic citation style”). The entries currently in library.bib are intended to provide syntax examples that capture the range of entries you are most likely to use. You will need to delete and replace the contents of library.bib with your own citation entries.\n\n\n\n\n\n\nNote\n\n\n\nThe examples in library.bib are nicely formatted so you can read and follow the patterns, but formatting and order of the library.bib file doesn’t actually matter and will not be assessed. Just be sure the citations are as complete as possible (authors, titles, dates, urls, dois, etc.).\n\n\n@book{hadley2016,\n  author = {Hadley, Wickham}, \n  title = {ggplot2: Elegant Graphics for Data Analysis}, \n  url  = {https://ggplot2-book.org},\n  publisher = {Springer},\n  address = {New York, NY},\n  type = {Online book},\n  year = {2016},\n  edition = {3}\n}"
-  },
-  {
-    "objectID": "index.html#creating-in-text-citations",
-    "href": "index.html#creating-in-text-citations",
-    "title": "Title",
-    "section": "Creating in-text citations",
-    "text": "Creating in-text citations\nItems you cite in the text will be automatically added to a list of References at the bottom of the corresponding page. To cite a reference in the text, use the corresponding citation key (the first item in each bibtex entry—it shouldn’t have any spaces or special characters) and format the citation using the appropriate quarto format for in-text citations. This is similar to how we cross-reference tables and figures from code chunk labels. For example, the syntax\n@hadley2016 provides excellent examples of customizing our visualizations using **ggplot2**.\nproduces the following text:\n\nHadley (2016) provides excellent examples of customizing our visualizations using ggplot2.\n\nAnd the corresponding reference is listed in full at the bottom of this page."
-  },
-  {
-    "objectID": "index.html#including-images-or-gifs",
-    "href": "index.html#including-images-or-gifs",
-    "title": "Title",
-    "section": "Including images or gifs",
-    "text": "Including images or gifs\nI would strongly recommend using knitr’s include_graphics() functions within code chunks to include images or gifs within your blog. This makes it easier to modify figures, add captions and links, and visually find the code for figures quickly if you need to modify something about the output. There is also markdown syntax to display or embed images, but I would typically not recommend it.\n\n\n\n\n\n\n\n\n\nImage courtesy of giphy.com\n\n\n\n\nEither approach will take either a filepath to a stored file or a URL to an image or gif. Width can be specified as a percentage of the width of the page (0% to 100%; my preferred approach) or as a fixed number of units (e.g. 400px, 3in, 10cm).\nI can’t imagine a scenario where students should or would include videos within their blog, but Quarto provides guidance on embedding videos, as well.\n\n\n\n\n\n\nNote\n\n\n\nThe first figure of your blog will be used as the display image on our course’s landing page!"
-  },
-  {
-    "objectID": "index.html#panel-tabsets",
-    "href": "index.html#panel-tabsets",
-    "title": "Title",
-    "section": "Panel tabsets",
-    "text": "Panel tabsets\nUse the following format to add information or tables or visualizations in tabset panels.\n\nTab 1Tab 2\n\n\nSome information in one tab\n\n\nSome information in a different tab"
-  },
-  {
-    "objectID": "index.html#panel-layouts-for-content",
-    "href": "index.html#panel-layouts-for-content",
-    "title": "Title",
-    "section": "Panel layouts for content",
-    "text": "Panel layouts for content\nUse the following format to have more control over the panel layout of various components.\nThe syntax “[ [1], [1,1] ]” indicates that we have three pieces of content that we want to spread across two rows. The first piece of content will be in its own row, and then the next two components will be split across two columns of equal width in a second row.\n\n\n\nRow 1 with only one output\nSome content\n\n\n\n\nFirst column of row 2\nSome other content\n\n\nSecond column of row 2\nSome additional content.\n\n\n\nThe values provided within each row specify the relative widths of the content within that row. For example “[1,2,1]” would create a row with 3 columns where the first and third columns are the same width and the middle column is twice as wide."
-  },
-  {
-    "objectID": "index.html#layouts-for-tables-and-visualizations-produced-by-code-chunks",
-    "href": "index.html#layouts-for-tables-and-visualizations-produced-by-code-chunks",
-    "title": "Title",
-    "section": "Layouts for tables and visualizations produced by code chunks",
-    "text": "Layouts for tables and visualizations produced by code chunks\nFor details on how to layout subfigures from multiple graphs produced by the same code chunk, see the examples in the Knitr tabs of the sections on figure layouts, subcaptions, and custom layouts.\nThe same syntax shown across the linked examples can be used to create subtables by replacing fig-cap and fig-subcap with tbl-cap and tbl-subcap.\nTwo examples in Table 1 and Figure 1 below are borrowed and slightly modified from the linked sections.\n\n\n\nTable 1: Two tables side-by-side\n\n\n\n\n\n\n\n(a) First three rows of cars dataset\n\n\n\n\n\nspeed\ndist\n\n\n\n\n4\n2\n\n\n4\n10\n\n\n7\n4\n\n\n\n\n\n\n\n\n\n\n\n(b) First three rows of pressure dataset\n\n\n\n\n\ntemperature\npressure\n\n\n\n\n0\n0.0002\n\n\n20\n0.0012\n\n\n40\n0.0060\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n(a) cars\n\n\n\n\n\n \n\n\n\n\n\n\n\n\n(b) pressure\n\n\n\n\n\n\n\n\n\n\n\n\n\n(c) mtcars\n\n\n\n\n\n\n\nFigure 1: Three figures in a complex layout"
-  },
-  {
-    "objectID": "yet-another-page.html",
-    "href": "yet-another-page.html",
-    "title": "Website title",
-    "section": "",
-    "text": "This is yet another page that can be linked! You are not required to include more than just index.qmd, but you are welcome to make content on different pages, if desired. This may help with managing GitHub commits, as well."
-  },
-  {
-    "objectID": "yet-another-page.html#sec-note",
-    "href": "yet-another-page.html#sec-note",
-    "title": "Website title",
-    "section": "A note",
-    "text": "A note\nNotice that you can also modify the YAML headings at the top of each page as I did in the first subpage or completely delete them, as I did here."
-  },
-  {
-    "objectID": "visuals/debug_map.html",
-    "href": "visuals/debug_map.html",
-    "title": "Pump and Prosper — Visualization Debug",
-    "section": "",
-    "text": "library(tidyverse)\nlibrary(plotly)\n\nfull_data &lt;- read_csv(\"../data/combined_data.csv\", show_col_types = FALSE) |&gt;\n  filter(month &gt;= as.Date(\"2024-12-01\")) |&gt;  # Exclude partial November 2024.\n  arrange(month, State) |&gt;\n  mutate(\n    month_label = format(month, \"%Y-%m\"),\n    hover_label = paste0(\n      State, \"&lt;br&gt;Month: \", month_label,\n      \"&lt;br&gt;Hours for 15 gallons: \", round(hours_per_fillup, 2),\n      \"&lt;br&gt;Real gas price: $\", round(MRA_Regular, 2), \"/gallon\"\n    )\n  )"
-  },
-  {
-    "objectID": "visuals/debug_map.html#animated-affordability-map",
-    "href": "visuals/debug_map.html#animated-affordability-map",
-    "title": "Pump and Prosper — Visualization Debug",
-    "section": "1. Animated affordability map",
-    "text": "1. Animated affordability map\n\nplot_ly(\n  data = full_data,\n  type = \"choropleth\",\n  locations = ~State,\n  locationmode = \"USA-states\",\n  z = ~hours_per_fillup,\n  frame = ~month_label,\n  text = ~hover_label,\n  hoverinfo = \"text\",\n  colorscale = \"YlOrRd\",\n  zmin = min(full_data$hours_per_fillup),\n  zmax = max(full_data$hours_per_fillup),\n  colorbar = list(title = \"Hours\")\n) |&gt;\n  layout(\n    title = \"Hours of Work Needed for 15 Gallons\",\n    geo = list(scope = \"usa\"),\n    height = 600\n  ) |&gt;\n  animation_opts(frame = 800, transition = 0, redraw = TRUE) |&gt;\n  animation_slider(currentvalue = list(prefix = \"Month: \"))"
-  },
-  {
-    "objectID": "visuals/debug_map.html#animated-real-gasoline-price-map",
-    "href": "visuals/debug_map.html#animated-real-gasoline-price-map",
-    "title": "Pump and Prosper — Visualization Debug",
-    "section": "2. Animated real gasoline price map",
-    "text": "2. Animated real gasoline price map\n\nplot_ly(\n  data = full_data,\n  type = \"choropleth\",\n  locations = ~State,\n  locationmode = \"USA-states\",\n  z = ~MRA_Regular,\n  frame = ~month_label,\n  text = ~hover_label,\n  hoverinfo = \"text\",\n  colorscale = \"Blues\",\n  zmin = min(full_data$MRA_Regular),\n  zmax = max(full_data$MRA_Regular),\n  colorbar = list(title = \"2026 $/gal\")\n) |&gt;\n  layout(\n    title = \"Real Regular Gasoline Prices (September 2026 Dollars)\",\n    geo = list(scope = \"usa\"),\n    height = 600\n  ) |&gt;\n  animation_opts(frame = 800, transition = 0, redraw = TRUE) |&gt;\n  animation_slider(currentvalue = list(prefix = \"Month: \"))"
-  },
-  {
-    "objectID": "visuals/debug_map.html#average-affordability-over-time",
-    "href": "visuals/debug_map.html#average-affordability-over-time",
-    "title": "Pump and Prosper — Visualization Debug",
-    "section": "3. Average affordability over time",
-    "text": "3. Average affordability over time\n\ntrend_data &lt;- full_data |&gt;\n  group_by(month) |&gt;\n  summarise(\n    mean_hours_per_fillup = mean(hours_per_fillup),\n    .groups = \"drop\"\n  )\n\ntrend_plot &lt;- ggplot(\n  trend_data,\n  aes(x = month, y = mean_hours_per_fillup)\n) +\n  geom_line() +\n  geom_point() +\n  scale_x_date(date_breaks = \"3 months\", date_labels = \"%b %Y\") +\n  labs(\n    title = \"Average Hours of Work Needed for 15 Gallons\",\n    subtitle = \"Equal-weighted average across 50 states\",\n    x = NULL,\n    y = \"Hours of work\"\n  ) +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 35, hjust = 1))\n\nggplotly(trend_plot, tooltip = c(\"x\", \"y\"))\n\n\n\n\n\nOctober 2025 is absent because the CPI series used for the real variables is missing that month."
+    "text": "Our main question is whether states with higher gasoline prices also have higher unemployment. Here, each point is a state in September 2026, colored by region. The x-axis is the real price of regular gasoline, and the y-axis is the unemployment rate. The gray line is a straight-line trend fitted across all 50 states, and the shaded band shows the uncertainty around it.\n\n\n\n\n\n\n\n\nFigure 1: Real price of regular gasoline and unemployment rate, by state, September 2026. The gray line shows a straight-line trend, and the shaded band shows the uncertainty around it.\n\n\n\n\nThe trend line rises: states with more expensive gas tend to have somewhat higher unemployment, though the points are widely scattered around the line, so the relationship is weak. Because this compares states at a single point in time, it shows an association, not that higher gas prices cause higher unemployment."
   },
   {
     "objectID": "visuals/map_zhi.html",
@@ -144,7 +25,28 @@
     "href": "visuals/map_zhi.html#running-code",
     "title": "debug_map",
     "section": "Running Code",
-    "text": "Running Code\n\n\nWarning: package 'tidyverse' was built under R version 4.5.2\n\n\nWarning: package 'ggplot2' was built under R version 4.5.2\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   4.0.2     ✔ tibble    3.3.0\n✔ lubridate 1.9.4     ✔ tidyr     1.3.1\n✔ purrr     1.1.0     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nWarning: package 'sf' was built under R version 4.5.3\n\n\nLinking to GEOS 3.14.1, GDAL 3.12.1, PROJ 9.7.1; sf_use_s2() is TRUE\n\n\nWarning: package 'plotly' was built under R version 4.5.3\n\n\n\nAttaching package: 'plotly'\n\nThe following object is masked from 'package:ggplot2':\n\n    last_plot\n\nThe following object is masked from 'package:stats':\n\n    filter\n\nThe following object is masked from 'package:graphics':\n\n    layout\n\n\nWarning: package 'maps' was built under R version 4.5.3\n\n\n\nAttaching package: 'maps'\n\nThe following object is masked from 'package:purrr':\n\n    map\n\n\nWarning: package 'mdsr' was built under R version 4.5.3\n\n\nWarning: package 'ggspatial' was built under R version 4.5.3\n\n\nWarning: package 'leaflet' was built under R version 4.5.3\n\n\nWhen you click the Render button a document will be generated that includes both content and the output of embedded code. You can embed code like this:\n\n\nRows: 1100 Columns: 18\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr   (1): State\ndbl  (16): MNA_Regular, MNA_Mid.Grade, MNA_Premium, MNA_Diesel, CPIAUCNS, MR...\ndate  (1): month\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\n\n\n\n\nYou can add options to executable code like this\n\n\n\n\n\n\n\n\n\n\n\n\nThe echo: false option disables the printing of code (only output is displayed)."
+    "text": "Running Code\nWhen you click the Render button a document will be generated that includes both content and the output of embedded code. You can embed code like this:\n\n\n\n\n\n\nYou can add options to executable code like this\n\n\n\n\n\n\n\n\n\n\n\n\nThe echo: false option disables the printing of code (only output is displayed)."
+  },
+  {
+    "objectID": "index.html#our-research-questions",
+    "href": "index.html#our-research-questions",
+    "title": "Pump and Prosper",
+    "section": "Our research questions",
+    "text": "Our research questions\n[REFINE THESE TO MATCH VISUALS]\n\nHow have real gasoline prices evolved across the United States?\nWhich states and regions have experienced the largest increases?\nHow have changes in gasoline prices affected affordability relative to earnings?\n\n\n\n\n\n\n\n\n\nFigure 1: Monthly average real regular gasoline prices across the 50 states."
+  },
+  {
+    "objectID": "index.html#explore-our-findings",
+    "href": "index.html#explore-our-findings",
+    "title": "Pump and Prosper",
+    "section": "Explore our findings",
+    "text": "Explore our findings\n\nThe evolution of gasoline prices\nExplore our interactive maps.\n\n\nRegional differences\nCompare gasoline price changes across states and regions.\n\n\nGasoline affordability"
+  },
+  {
+    "objectID": "index.html#contributors",
+    "href": "index.html#contributors",
+    "title": "Pump and Prosper",
+    "section": "Contributors",
+    "text": "Contributors\n\n\n\n\n\n\nDeclan DuBois\n\n\n\nScraped Gas Price and Federal Reserve Data\nCoded interactive gas price summary table\nCreated visuals and formatting for Blog\n\n\n\n\n\n\nTetsuya Tanaka\n\n\n\nContribution 1\nContribution 2\nContribution 3\n\n\n\n\n\n\nZhi Heng Chen\n\n\n\nContribution 1\nContribution 2\nContribution 3"
   },
   {
     "objectID": "visuals/summary_table.html",
@@ -172,27 +74,76 @@
     "href": "visuals/summary_table.html#explore-the-data",
     "title": "Changes in Real Gasoline Prices",
     "section": "Explore the data",
-    "text": "Explore the data\nThe interactive table below allows readers to investigate real gasoline price changes across different states, regions, and time periods, extending beyond our analysis of 2026.\nUse the filters at the top of the table to select states, regions, a start month, an end month, and price ranges. Leave the state filter blank to display all states in the selected regions. For a direct comparison across states, select exactly one start month and one end month. The end month must be later than the start month.\nClick any column heading to sort the results.\n\n\n\n\n\n\nPercentage change is calculated by dividing the difference between the ending and starting prices by the starting price and multiplying by 100. Positive values indicate that gasoline became more expensive relative to the general consumer price level, while negative values indicate the opposite."
+    "text": "Explore the data\nThe interactive table below allows readers to investigate real gasoline price changes across different states, regions, and time periods, extending beyond our analysis of 2026.\nUse the filters at the top of the table to select states, regions, a start month, an end month, and price ranges. Leave the state filter blank to display all states in the selected regions. For a direct comparison across states, select exactly one start month and one end month. The end month must be later than the start month.\nClick any column heading to sort the results.\nPositive values indicate that gasoline became more expensive relative to the general consumer price level, while negative values indicate the opposite."
   },
   {
     "objectID": "visuals/summary_table.html#limitations",
     "href": "visuals/summary_table.html#limitations",
     "title": "Changes in Real Gasoline Prices",
     "section": "Limitations",
-    "text": "Limitations\nJanuary 2026 coincided with the lowest nationwide average real gasoline price observed in our dataset. Consequently, the magnitude of the reported increases is sensitive to our choice of starting month. Nevertheless, January provides a natural starting point for examining price changes during 2026.\nWithin the broader dataset, October 2025 is excluded because CPI data are unavailable in our source dataset. November 2024 contains only observations beginning November 16, while March and May 2026 each have three missing days. Consequently, the corresponding monthly averages may not perfectly represent prices across the entirety of those months.\nOur inflation adjustment uses the national consumer price index rather than state-specific measures of consumer inflation. Moreover, our regional averages weight each state equally and therefore should not be interpreted as the average price increase experienced by individual consumers.\nFinally, our analysis describes changes between selected endpoints rather than fluctuations throughout the intervening period. Further research incorporating regional supply chains, refinery operations, taxation, and wholesale gasoline prices could help explain the geographical differences observed."
+    "text": "Limitations\nJanuary 2026 coincided with the lowest nationwide average real gasoline price observed in our dataset. Consequently, the magnitude of the reported increases is sensitive to our choice of starting month. Nevertheless, January provides a natural starting point for examining price changes during 2026.\nWithin the broader dataset, October 2025 is excluded because CPI data are unavailable in our source dataset. November 2024 contains only observations beginning November 16, while March and May 2026 each have three missing days. Consequently, the corresponding monthly averages may not perfectly represent prices across the entirety of those months.\nOur inflation adjustment uses the national consumer price index rather than state-specific measures of consumer inflation. Moreover, our regional averages weight each state equally and therefore should not be interpreted as the average price increase experienced by individual consumers.\nFinally, our analysis describes changes between selected endpoints rather than fluctuations throughout the intervening period."
   },
   {
-    "objectID": "index.html#our-research-questions",
-    "href": "index.html#our-research-questions",
+    "objectID": "index.html#software-and-resources",
+    "href": "index.html#software-and-resources",
     "title": "Pump and Prosper",
-    "section": "Our research questions",
-    "text": "Our research questions\n\nHow have real gasoline prices evolved across the United States?\nWhich states and regions have experienced the largest increases?\nHow have changes in gasoline prices affected affordability relative to earnings?\n\n\n\n\n\n\n\n\n\nFigure 1: Monthly average real regular gasoline prices across the 50 states."
+    "section": "Software and Resources",
+    "text": "Software and Resources\nOur approach to data wrangling, statistical analysis, and visualization draws upon the methods introduced in Modern Data Science with R (Baumer et al. 2021).\nData wrangling and analysis were conducted in R using tidyverse. Visualizations were developed using ggplot2, plotly, sf, and maps. Interactive tables were constructed using DT.\nThe website was developed using Quarto."
   },
   {
-    "objectID": "index.html#explore-our-findings",
-    "href": "index.html#explore-our-findings",
+    "objectID": "index.html#references",
+    "href": "index.html#references",
     "title": "Pump and Prosper",
-    "section": "Explore our findings",
-    "text": "Explore our findings\n\nThe evolution of gasoline prices\nExplore our interactive maps.\n\n\nRegional differences\nCompare gasoline price changes across states and regions.\n\n\nGasoline affordability"
+    "section": "References",
+    "text": "References\n\n\nAmerican Automobile Association (n.d.). “AAA Gas Prices.”\n\n\nBaumer, B. S., Kaplan, D. T., and Horton, N. J. (2021), Modern data science with R, Chapman; Hall/CRC.\n\n\nGreathouse, J. A. (2026), “AAAGas: Daily state-level gasoline prices,” GitHub.\n\n\nU.S. Bureau of Labor Statistics (2026a), “Consumer price index for all urban consumers: All items in u.s. City average,” Federal Reserve Bank of St. Louis, FRED.\n\n\nU.S. Bureau of Labor Statistics (2026e), “State unemployment rates,” Federal Reserve Bank of St. Louis, FRED.\n\n\nU.S. Bureau of Labor Statistics (2026b), “Average weekly earnings of all employees: Total private,” Federal Reserve Bank of St. Louis, FRED.\n\n\nU.S. Bureau of Labor Statistics (2026c), “Average weekly hours of all employees: Total private,” Federal Reserve Bank of St. Louis, FRED.\n\n\nU.S. Bureau of Labor Statistics (2026d), “State labor force participation rates,” Federal Reserve Bank of St. Louis, FRED.\n\n\nU.S. Energy Information Administration (2026), “The regional differences in gasoline prices this memorial day,” Available at https://www.eia.gov/todayinenergy/detail.php?id=67706."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Pump and Prosper",
+    "section": "",
+    "text": "NEED TEXT HERE"
+  },
+  {
+    "objectID": "index.html#introduction",
+    "href": "index.html#introduction",
+    "title": "Pump and Prosper",
+    "section": "",
+    "text": "NEED TEXT HERE"
+  },
+  {
+    "objectID": "visuals/scatter_regression.html#do-weaker-labor-markets-make-gasoline-less-affordable",
+    "href": "visuals/scatter_regression.html#do-weaker-labor-markets-make-gasoline-less-affordable",
+    "title": "Gasoline Affordability and Unemployment",
+    "section": "",
+    "text": "Rising gasoline prices hurt most when household budgets are already strained. To see whether states with weaker labor markets also faced the steepest affordability burden, we compare each state’s unemployment rate with the number of hours of work needed to buy 15 gallons of regular gasoline in September 2026.\nHours per fill-up combines real gasoline prices, real weekly earnings, and average weekly hours:\n\\[\n\\text{Hours per fill-up} = \\frac{15 \\times \\text{real gas price}}{\\text{real weekly earnings} / \\text{weekly hours}}\n\\]\nA higher value means gasoline is less affordable for a typical worker in that state.\n\n\n\n\n\n\n\n\nFigure 1: Unemployment rate and hours of work needed to buy 15 gallons of regular gasoline, by state, September 2026. The line shows the fitted simple linear regression with a 95% confidence band.\n\n\n\n\nHover over any point to see the state and its values."
+  },
+  {
+    "objectID": "visuals/scatter_regression.html#regression-results",
+    "href": "visuals/scatter_regression.html#regression-results",
+    "title": "Gasoline Affordability and Unemployment",
+    "section": "Regression results",
+    "text": "Regression results\n\nUnemployment alone\n\n\n\n\nTable 1: Simple linear regression of hours per fill-up on unemployment rate, September 2026 (n = 50 states).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTerm\nEstimate\nStd. Error\n95% CI Lower\n95% CI Upper\np-value\n\n\n\n\nIntercept\n1.81\n0.123\n1.562\n2.058\n0.000\n\n\nUnemployment rate (%)\n0.01\n0.032\n-0.054\n0.073\n0.756\n\n\n\n\n\n\n\n\nThe estimated slope is 0.01 hours per percentage point of unemployment (p = 0.76), and the correlation between the two variables is 0.05. Unemployment explains only 0.2% of the variation in hours per fill-up across states. The 95% confidence interval for the slope, from -0.054 to 0.073, includes zero.\n\n\n\nAdding region\n\n\n\n\nTable 2: Multiple linear regression of hours per fill-up on unemployment rate and Census region, September 2026 (n = 50 states). The Midwest is the reference region.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTerm\nEstimate\nStd. Error\n95% CI Lower\n95% CI Upper\np-value\n\n\n\n\nIntercept (Midwest)\n1.878\n0.108\n1.660\n2.097\n0.000\n\n\nUnemployment rate (%)\n-0.017\n0.029\n-0.074\n0.041\n0.563\n\n\nNortheast\n-0.080\n0.065\n-0.211\n0.051\n0.224\n\n\nSouth\n0.002\n0.057\n-0.113\n0.117\n0.974\n\n\nWest\n0.183\n0.061\n0.059\n0.306\n0.005\n\n\n\n\n\n\n\n\nAfter accounting for region, the model explains 30.2% of the variation in hours per fill-up (adjusted R² = 0.24). Holding the unemployment rate constant, Western states required an estimated 0.18 more hours of work per fill-up than Midwestern states (p = 0.0047). The Northeast and South do not differ significantly from the Midwest."
+  },
+  {
+    "objectID": "visuals/scatter_regression.html#limitations",
+    "href": "visuals/scatter_regression.html#limitations",
+    "title": "Gasoline Affordability and Unemployment",
+    "section": "Limitations",
+    "text": "Limitations\n\n\nOne month only. The analysis uses September 2026 so that each state is an independent observation. The relationship may differ in other months.\nCorrelation, not causation. The regression describes an association across states and cannot show that unemployment or region causes differences in affordability.\nAverage workers. Hours per fill-up uses each state’s average weekly earnings and hours. It does not reflect affordability for unemployed people or low-wage workers, who may be hit hardest.\nSmall sample. With 50 states, the model has limited power to detect weak relationships."
+  },
+  {
+    "objectID": "visuals/scatter_regression.html#gas-prices-and-unemployment",
+    "href": "visuals/scatter_regression.html#gas-prices-and-unemployment",
+    "title": "Gasoline Affordability and Unemployment",
+    "section": "",
+    "text": "Our main question is whether states with higher gasoline prices also have higher unemployment. Here, each point is a state in September 2026, colored by region. The x-axis is the real price of regular gasoline, and the y-axis is the unemployment rate. The gray line is a straight-line trend fitted across all 50 states, and the shaded band shows the uncertainty around it.\n\n\n\n\n\n\n\n\nFigure 1: Real price of regular gasoline and unemployment rate, by state, September 2026. The gray line shows a straight-line trend, and the shaded band shows the uncertainty around it.\n\n\n\n\nThe trend line rises: states with more expensive gas tend to have somewhat higher unemployment, though the points are widely scattered around the line, so the relationship is weak. Because this compares states at a single point in time, it shows an association, not that higher gas prices cause higher unemployment."
+  },
+  {
+    "objectID": "visuals/scatter_regression.html#gasoline-affordability-and-unemployment",
+    "href": "visuals/scatter_regression.html#gasoline-affordability-and-unemployment",
+    "title": "Gasoline Affordability and Unemployment",
+    "section": "Gasoline affordability and unemployment",
+    "text": "Gasoline affordability and unemployment\nTo see whether states with weaker labor markets also faced a heavier gasoline burden, we compare each state’s unemployment rate with the number of hours of work needed to buy 15 gallons of regular gasoline in September 2026. Each point is a state, colored by region, and the gray line is a straight-line trend fitted across all states, with a shaded band showing the uncertainty around it. The trend line stays fairly flat, suggesting little relationship between unemployment and gasoline affordability across states. Hover over any point to see the state and its values.\n\n\n\n\n\n\n\n\nFigure 2: Unemployment rate and hours of work needed to buy 15 gallons of regular gasoline, by state, September 2026. The gray line shows a straight-line trend, and the shaded band shows the uncertainty around it."
   }
 ]
