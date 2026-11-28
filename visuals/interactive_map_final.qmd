@@ -1,149 +1,217 @@
----
-title: "interactive_map_complete"
-format: html
----
 
+---
+title: "Gasoline Prices and Unemployment Across States"
+format: html
+execute:
+  echo: false
+  message: false
+  warning: false
+---
 
 ```{r}
-#| echo: false
+#| label: setup
+
 library(tidyverse)
 library(sf)
 library(plotly)
 library(ggplot2)
+
+# Read the prepared dataset containing state-level gasoline prices,
+# unemployment rates, and geographic information.
+full_data_with_state <- readRDS("../data/full_data_for_interactive_map.rds")
 ```
 
-```{r}
-#| echo: false
-#Reading Data
-full_data_with_state <- readRDS("../data/full_data_for_interactive_map.rds")
+## Gasoline prices and unemployment across states
 
-#All unique months (chronologically)
+We used interactive maps to examine how real gasoline prices (dollars per gallon, adjusted for inflation) and unemployment rates (percent) varied across the contiguous United States from November 2024 to September 2026. The two maps display these variables side by side for each month, allowing us to compare differences between states and observe how regional patterns changed over time. We also used a consistent color scale across all months, ensuring that changes in color represent actual changes in gasoline prices and unemployment rather than changes in the scale itself. Readers can use the slider to explore these patterns over time and hover over individual states to view their values.
+
+```{r}
+#| label: fig-interactive-state-maps
+#| fig-cap: "Monthly real regular gasoline prices and unemployment rates across the contiguous United States, November 2024–September 2026."
+
+# Identify all available months in chronological order.
 unique_months <- sort(unique(full_data_with_state$month))
 
-# Fixed color scale for each variable, so shades are comparable across months
-gas_limits   <- range(full_data_with_state$MRA_Regular, na.rm = TRUE)
+# Establish fixed color scales for both variables.
+# This ensures that colors remain comparable across all months.
+gas_limits <- range(full_data_with_state$MRA_Regular, na.rm = TRUE)
 unemp_limits <- range(full_data_with_state$unemployment_rate, na.rm = TRUE)
 
-# Empty list which is then filled with both maps
+# Create an empty list to store the maps for each month.
 plotly_plots <- list()
 
-# For loop to create a different pair of maps for each month
+# Create a pair of maps for every month in the dataset.
 for (i in seq_along(unique_months)) {
-  # Filtering for the unique month
+
+  # Filter the dataset to the current month.
   month_variable <- unique_months[i]
+
   full_data_with_state_specific_month <- full_data_with_state |>
     filter(month == month_variable)
 
-  # Left map: Gas Prices (blue)
-  Gasplot <- ggplot(full_data_with_state_specific_month,
-                    aes(geometry = geom, fill = MRA_Regular,
-                        text = paste0(
-                          "State: ", State,
-                          "<br>Gas Price: $", round(MRA_Regular, 3)))) +
+  # Left map: Real gasoline prices.
+  Gasplot <- ggplot(
+    full_data_with_state_specific_month,
+    aes(
+      geometry = geom,
+      fill = MRA_Regular,
+      text = paste0(
+        "State: ", State,
+        "<br>Gas Price: $", round(MRA_Regular, 3)
+      )
+    )
+  ) +
     geom_sf() +
-    scale_fill_distiller(type = "seq", direction = 1, limits = gas_limits) +
+    scale_fill_distiller(
+      type = "seq",
+      direction = 1,
+      limits = gas_limits
+    ) +
     theme_void() +
     labs(fill = "Gas ($/gal)")
 
-  # Right map: Unemployment Rate (red)
-  Unempplot <- ggplot(full_data_with_state_specific_month,
-                      aes(geometry = geom, fill = unemployment_rate,
-                          text = paste0(
-                            "State: ", State,
-                            "<br>Unemployment Rate: ",
-                            round(unemployment_rate, 2), "%"))) +
+  # Right map: Unemployment rates.
+  Unempplot <- ggplot(
+    full_data_with_state_specific_month,
+    aes(
+      geometry = geom,
+      fill = unemployment_rate,
+      text = paste0(
+        "State: ", State,
+        "<br>Unemployment Rate: ",
+        round(unemployment_rate, 2), "%"
+      )
+    )
+  ) +
     geom_sf() +
-    scale_fill_distiller(type = "seq", palette = "Reds", direction = 1,
-                         limits = unemp_limits) +
+    scale_fill_distiller(
+      type = "seq",
+      palette = "Reds",
+      direction = 1,
+      limits = unemp_limits
+    ) +
     theme_void() +
     labs(fill = "Unemployment (%)")
 
-  # Side-by-side figure for one month
+  # Combine both maps into a single side-by-side figure.
   fig <- plotly_build(
     subplot(
       ggplotly(Gasplot, tooltip = "text"),
       ggplotly(Unempplot, tooltip = "text"),
-      nrows = 1, margin = 0.08))
+      nrows = 1,
+      margin = 0.08
+    )
+  )
 
-  # Adjusting position of the legends by finding the legend from the traces
-  # and then changing the x position.
+  # Adjust the positions and lengths of the two color legends.
   bar_x <- c(0.42, 1)
   cb <- 0
+
   for (k in seq_along(fig$x$data)) {
     if (!is.null(fig$x$data[[k]]$marker$colorbar)) {
       cb <- cb + 1
       fig$x$data[[k]]$marker$colorbar$x <- bar_x[cb]
       fig$x$data[[k]]$marker$colorbar$len <- 0.3
       fig$x$data[[k]]$marker$colorbar$lenmode <- "fraction"
-    }}
+    }
+  }
+
   plotly_plots[[i]] <- fig
 }
 
-# This part is probably the most confusing, so I had to learn a bit about
-# how Plotly works. Each month's plot has its own set of "traces",
-# that together produce the two maps. We need to combine these traces so
-# that Plotly knows what to display for each month.
+# Each monthly Plotly figure contains multiple traces.
+# Combine these traces so that the slider can switch between months.
 
-# Empty list that will collect the traces from every month
+# Collect all traces and record which month each trace belongs to.
 all_traces <- list()
-
-# Empty vector to record which month each trace came from.
 trace_month <- c()
 
-# Go through each month's plotly plot, one at a time
 for (i in seq_along(plotly_plots)) {
-  # Grab this month's traces and append them
+
   month_traces <- plotly_plots[[i]]$x$data
+
   all_traces <- c(all_traces, month_traces)
 
-  # Labels where the traces came from
-  trace_month <- c(trace_month, rep(i, length(month_traces)))
+  trace_month <- c(
+    trace_month,
+    rep(i, length(month_traces))
+  )
 }
 
-# This for loop determines which traces are initially shown (Month 1)
+# Initially display only the traces belonging to the first month.
 for (j in seq_along(all_traces)) {
   all_traces[[j]]$visible <- trace_month[j] == 1
 }
 
-# Inherit Month 1's layout, then add in all the traces
+# Use the first month's figure as the starting layout.
 combined <- plotly_plots[[1]]
 combined$x$data <- all_traces
 
-# Create the slider and the ticker marks
+# Create one slider step for each available month.
 tickers <- list()
+
 for (i in seq_along(unique_months)) {
+
   month_name <- format(as.Date(unique_months[i]), "%B %Y")
+
   show_specific_month <- trace_month == i
 
-  # Controls what occurs on each ticker
   tickers[[i]] <- list(
     method = "restyle",
     args = list("visible", show_specific_month),
-    label = month_name)
+    label = month_name
+  )
 }
 
-# Attach the slider to the combined figure
+# Attach the monthly slider to the combined figure.
 combined$x$layout$sliders <- list(
   list(
     active = 0,
     currentvalue = list(prefix = "Month: "),
     x = 0.15,
     y = 0.23,
-    steps = tickers))
+    steps = tickers
+  )
+)
 
-# Centered Titles for the two maps
+# Add centered titles above each map.
 combined$x$layout$annotations <- list(
-  list(text = "Average Regular Gas Price by State",
-       x = 0.21, y = 0.73,
-       xref = "paper", yref = "paper",
-       showarrow = FALSE, xanchor = "center"),
-  list(text = "Unemployment by State",
-       x = 0.79, y = 0.7,
-       xref = "paper", yref = "paper",
-       showarrow = FALSE, xanchor = "center"))
+  list(
+    text = "Average Regular Gas Price by State",
+    x = 0.21,
+    y = 0.73,
+    xref = "paper",
+    yref = "paper",
+    showarrow = FALSE,
+    xanchor = "center"
+  ),
+  list(
+    text = "Unemployment by State",
+    x = 0.79,
+    y = 0.7,
+    xref = "paper",
+    yref = "paper",
+    showarrow = FALSE,
+    xanchor = "center"
+  )
+)
 
-# Display the final combined interactive map
+# Display the final interactive map.
 combined
-
 ```
 
+Across the country, states with higher gasoline prices also tended to have higher unemployment rates. This positive relationship appeared throughout the period we examined, although the strength of the relationship varied across states and months. The pattern was particularly noticeable along the West Coast, where California, Oregon, and Washington consistently had some of the highest gasoline prices and relatively high unemployment. Over the full period, these three states averaged approximately $4.68 per gallon and 5.1% unemployment, compared with national averages of approximately $3.46 per gallon and 3.9% unemployment. California stood out in particular, averaging approximately $5.11 per gallon and 5.4% unemployment, the highest averages among the states for both measures.
+
+Gasoline prices in the West also appeared to fluctuate more over time, particularly across the Mountain states. In contrast, the Midwest generally had the lowest unemployment of any region, averaging around 3.6%, with relatively little variation throughout the period. The East Coast fell somewhere in between, although the Northeast generally experienced higher gasoline prices and unemployment than parts of the Southeast.
+
+An important finding is that gasoline prices and unemployment did not always move together over time. For example, average real gasoline prices increased by approximately 52% between February and May 2026, rising from roughly $2.94 to $4.46 per gallon, while unemployment remained relatively stable between 4.0% and 4.1%. This suggests that although states with higher gasoline prices often had higher unemployment, changes in gasoline prices did not necessarily correspond to changes in unemployment.
+
+Overall, the maps reveal substantial regional differences in gasoline prices and unemployment across the United States. However, they also suggest that unemployment is influenced by economic and geographic factors beyond gasoline prices alone.
+
+## Limitations
+
+Our analysis has several limitations. First, the maps display state-level averages, which can hide substantial differences within individual states. For example, urban and rural areas may experience different economic conditions and gasoline prices, but these differences cannot be identified using state-level data alone. A future analysis using county- or metropolitan-level data could provide a more detailed understanding of these patterns.
+
+Second, although we observed a positive relationship between gasoline prices and unemployment across states, our maps cannot establish that higher gasoline prices cause higher unemployment. Other factors, such as regional economic conditions, industry composition, population density, and differences in transportation infrastructure, may help explain the observed relationship.
+
+Finally, our analysis focuses on the contiguous United States and does not include Alaska or Hawaii. Our findings therefore should not be generalized to every state. Additionally, the period examined, November 2024 through September 2026, represents a relatively short window and may not capture longer-term relationships between gasoline prices and economic conditions.
