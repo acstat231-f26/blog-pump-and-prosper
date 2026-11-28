@@ -1,0 +1,53 @@
+---
+title: "interactive_map_wrangle"
+format: html
+---
+```{r}
+library(tidyverse)
+library(sf)
+library(maps)
+```
+
+
+```{r}
+#Reading Data
+full_data <- read_csv("../data/combined_data.csv")
+
+# Create sf object for US counties
+states_map <- maps::map("state", region = ".",
+                       plot = FALSE, fill = TRUE)|>  st_as_sf()
+
+#Hard coded vector for states
+state_names <- c(
+  "AL" = "Alabama", "AZ" = "Arizona", "AR" = "Arkansas", "CA" = "California", 
+  "CO" = "Colorado", "CT" = "Connecticut", "DE" = "Delaware", 
+  "DC" = "District of Columbia", "FL" = "Florida", "GA" = "Georgia", 
+  "ID" = "Idaho", "IL" = "Illinois", "IN" = "Indiana", "IA" = "Iowa", 
+  "KS" = "Kansas", "KY" = "Kentucky", "LA" = "Louisiana", "ME" = "Maine",
+  "MD" = "Maryland", "MA" = "Massachusetts", "MI" = "Michigan", 
+  "MN" = "Minnesota", "MS" = "Mississippi", "MO" = "Missouri",
+  "MT" = "Montana", "NE" = "Nebraska", "NV" = "Nevada",
+  "NH" = "New Hampshire", "NJ" = "New Jersey", "NM" = "New Mexico",
+  "NY" = "New York", "NC" = "North Carolina", "ND" = "North Dakota",
+  "OH" = "Ohio", "OK" = "Oklahoma", "OR" = "Oregon", "PA" = "Pennsylvania", 
+  "RI" = "Rhode Island", "SC" = "South Carolina", "SD" = "South Dakota",
+  "TN" = "Tennessee", "TX" = "Texas", "UT" = "Utah", "VT" = "Vermont", 
+  "VA" = "Virginia", "WA" = "Washington", "WV" = "West Virginia", 
+  "WI" = "Wisconsin", "WY" = "Wyoming"
+)
+
+#Recode state names in full_data from initials to full names
+full_data <- full_data |>
+  mutate(State = recode(State, !!!state_names))
+
+#Recode and leftjoin to create dataset with the location
+states_map <- states_map |>
+  mutate(State = stringr::str_to_title(ID)) |> 
+  select(-ID)
+
+full_data_with_state <- left_join(states_map, full_data, by = "State")
+
+saveRDS(full_data_with_state, "../data/full_data_for_interactive_map.rds")
+```
+
+

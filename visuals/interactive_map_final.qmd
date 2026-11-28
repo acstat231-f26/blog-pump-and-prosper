@@ -1,0 +1,148 @@
+---
+title: "interactive_map_complete"
+format: html
+---
+
+
+```{r}
+library(tidyverse)
+library(sf)
+library(plotly)
+library(ggplot2)
+```
+
+```{r}
+
+#Reading Data
+full_data_with_state <- readRDS("../data/full_data_for_interactive_map.rds")
+
+#All unique months (chronologically)
+unique_months <- sort(unique(full_data_with_state$month))
+
+# Fixed color scale for each variable, so shades are comparable across months
+gas_limits   <- range(full_data_with_state$MRA_Regular, na.rm = TRUE)
+unemp_limits <- range(full_data_with_state$unemployment_rate, na.rm = TRUE)
+
+# Empty list which is then filled with both maps
+plotly_plots <- list()
+
+# For loop to create a different pair of maps for each month
+for (i in seq_along(unique_months)) {
+  # Filtering for the unique month
+  month_variable <- unique_months[i]
+  full_data_with_state_specific_month <- full_data_with_state |>
+    filter(month == month_variable)
+
+  # Left map: Gas Prices (blue)
+  Gasplot <- ggplot(full_data_with_state_specific_month,
+                    aes(geometry = geom, fill = MRA_Regular,
+                        text = paste0(
+                          "State: ", State,
+                          "<br>Gas Price: $", round(MRA_Regular, 3)))) +
+    geom_sf() +
+    scale_fill_distiller(type = "seq", direction = 1, limits = gas_limits) +
+    theme_void() +
+    labs(fill = "Gas ($/gal)")
+
+  # Right map: Unemployment Rate (red)
+  Unempplot <- ggplot(full_data_with_state_specific_month,
+                      aes(geometry = geom, fill = unemployment_rate,
+                          text = paste0(
+                            "State: ", State,
+                            "<br>Unemployment Rate: ",
+                            round(unemployment_rate, 2), "%"))) +
+    geom_sf() +
+    scale_fill_distiller(type = "seq", palette = "Reds", direction = 1,
+                         limits = unemp_limits) +
+    theme_void() +
+    labs(fill = "Unemployment (%)")
+
+  # Side-by-side figure for one month
+  fig <- plotly_build(
+    subplot(
+      ggplotly(Gasplot, tooltip = "text"),
+      ggplotly(Unempplot, tooltip = "text"),
+      nrows = 1, margin = 0.08))
+
+  # Adjusting position of the legends by finding the legend from the traces
+  # and then changing the x position.
+  bar_x <- c(0.42, 1)
+  cb <- 0
+  for (k in seq_along(fig$x$data)) {
+    if (!is.null(fig$x$data[[k]]$marker$colorbar)) {
+      cb <- cb + 1
+      fig$x$data[[k]]$marker$colorbar$x <- bar_x[cb]
+      fig$x$data[[k]]$marker$colorbar$len <- 0.3
+      fig$x$data[[k]]$marker$colorbar$lenmode <- "fraction"
+    }}
+  plotly_plots[[i]] <- fig
+}
+
+# This part is probably the most confusing, so I had to learn a bit about
+# how Plotly works. Each month's plot has its own set of "traces",
+# that together produce the two maps. We need to combine these traces so
+# that Plotly knows what to display for each month.
+
+# Empty list that will collect the traces from every month
+all_traces <- list()
+
+# Empty vector to record which month each trace came from.
+trace_month <- c()
+
+# Go through each month's plotly plot, one at a time
+for (i in seq_along(plotly_plots)) {
+  # Grab this month's traces and append them
+  month_traces <- plotly_plots[[i]]$x$data
+  all_traces <- c(all_traces, month_traces)
+
+  # Labels where the traces came from
+  trace_month <- c(trace_month, rep(i, length(month_traces)))
+}
+
+# This for loop determines which traces are initially shown (Month 1)
+for (j in seq_along(all_traces)) {
+  all_traces[[j]]$visible <- trace_month[j] == 1
+}
+
+# Inherit Month 1's layout, then add in all the traces
+combined <- plotly_plots[[1]]
+combined$x$data <- all_traces
+
+# Create the slider and the ticker marks
+tickers <- list()
+for (i in seq_along(unique_months)) {
+  month_name <- format(as.Date(unique_months[i]), "%B %Y")
+  show_specific_month <- trace_month == i
+
+  # Controls what occurs on each ticker
+  tickers[[i]] <- list(
+    method = "restyle",
+    args = list("visible", show_specific_month),
+    label = month_name)
+}
+
+# Attach the slider to the combined figure
+combined$x$layout$sliders <- list(
+  list(
+    active = 0,
+    currentvalue = list(prefix = "Month: "),
+    x = 0.15,
+    y = 0.23,
+    steps = tickers))
+
+# Centered Titles for the two maps
+combined$x$layout$annotations <- list(
+  list(text = "Average Regular Gas Price by State",
+       x = 0.21, y = 0.73,
+       xref = "paper", yref = "paper",
+       showarrow = FALSE, xanchor = "center"),
+  list(text = "Unemployment by State",
+       x = 0.79, y = 0.7,
+       xref = "paper", yref = "paper",
+       showarrow = FALSE, xanchor = "center"))
+
+# Display the final combined interactive map
+combined
+
+```
+

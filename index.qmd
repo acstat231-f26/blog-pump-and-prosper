@@ -53,7 +53,7 @@ combined_data |>
 
 ### The evolution of gasoline prices
 
-[Explore our interactive maps](visuals/map_zhi.qmd).
+[Explore our interactive maps](visuals/interactive_map_final.qmd).
 
 ### Regional differences
 
