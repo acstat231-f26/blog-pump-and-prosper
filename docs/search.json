@@ -4,7 +4,7 @@
     "href": "visuals/scatter_regression.html",
     "title": "Gasoline Affordability and Unemployment",
     "section": "",
-    "text": "To see whether states with weaker labor markets also faced a heavier gasoline burden, we compare each state’s unemployment rate with the number of hours of work needed to buy 15 gallons of regular gasoline in September 2026. The fitted regression line is nearly flat, suggesting little relationship between unemployment and gasoline affordability across states. Hover over any point to see the state and its values.\n\n\n\n\n\n\n\n\nFigure 1: Unemployment rate and hours of work needed to buy 15 gallons of regular gasoline, by state, September 2026. The line shows the fitted linear regression with a 95% confidence band."
+    "text": "Our main question is whether states with higher gasoline prices also have higher unemployment. Here, each point is a state in September 2026, colored by region. The x-axis is the real price of regular gasoline, and the y-axis is the unemployment rate. The gray line is a straight-line trend fitted across all 50 states, and the shaded band shows the uncertainty around it.\n\n\n\n\n\n\n\n\nFigure 1: Real price of regular gasoline and unemployment rate, by state, September 2026. The gray line shows a straight-line trend, and the shaded band shows the uncertainty around it.\n\n\n\n\nThe trend line rises: states with more expensive gas tend to have somewhat higher unemployment, though the points are widely scattered around the line, so the relationship is weak. Because this compares states at a single point in time, it shows an association, not that higher gas prices cause higher unemployment."
   },
   {
     "objectID": "visuals/map_zhi.html",
@@ -110,5 +110,40 @@
     "title": "Pump and Prosper",
     "section": "",
     "text": "NEED TEXT HERE"
+  },
+  {
+    "objectID": "visuals/scatter_regression.html#do-weaker-labor-markets-make-gasoline-less-affordable",
+    "href": "visuals/scatter_regression.html#do-weaker-labor-markets-make-gasoline-less-affordable",
+    "title": "Gasoline Affordability and Unemployment",
+    "section": "",
+    "text": "Rising gasoline prices hurt most when household budgets are already strained. To see whether states with weaker labor markets also faced the steepest affordability burden, we compare each state’s unemployment rate with the number of hours of work needed to buy 15 gallons of regular gasoline in September 2026.\nHours per fill-up combines real gasoline prices, real weekly earnings, and average weekly hours:\n\\[\n\\text{Hours per fill-up} = \\frac{15 \\times \\text{real gas price}}{\\text{real weekly earnings} / \\text{weekly hours}}\n\\]\nA higher value means gasoline is less affordable for a typical worker in that state.\n\n\n\n\n\n\n\n\nFigure 1: Unemployment rate and hours of work needed to buy 15 gallons of regular gasoline, by state, September 2026. The line shows the fitted simple linear regression with a 95% confidence band.\n\n\n\n\nHover over any point to see the state and its values."
+  },
+  {
+    "objectID": "visuals/scatter_regression.html#regression-results",
+    "href": "visuals/scatter_regression.html#regression-results",
+    "title": "Gasoline Affordability and Unemployment",
+    "section": "Regression results",
+    "text": "Regression results\n\nUnemployment alone\n\n\n\n\nTable 1: Simple linear regression of hours per fill-up on unemployment rate, September 2026 (n = 50 states).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTerm\nEstimate\nStd. Error\n95% CI Lower\n95% CI Upper\np-value\n\n\n\n\nIntercept\n1.81\n0.123\n1.562\n2.058\n0.000\n\n\nUnemployment rate (%)\n0.01\n0.032\n-0.054\n0.073\n0.756\n\n\n\n\n\n\n\n\nThe estimated slope is 0.01 hours per percentage point of unemployment (p = 0.76), and the correlation between the two variables is 0.05. Unemployment explains only 0.2% of the variation in hours per fill-up across states. The 95% confidence interval for the slope, from -0.054 to 0.073, includes zero.\n\n\n\nAdding region\n\n\n\n\nTable 2: Multiple linear regression of hours per fill-up on unemployment rate and Census region, September 2026 (n = 50 states). The Midwest is the reference region.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTerm\nEstimate\nStd. Error\n95% CI Lower\n95% CI Upper\np-value\n\n\n\n\nIntercept (Midwest)\n1.878\n0.108\n1.660\n2.097\n0.000\n\n\nUnemployment rate (%)\n-0.017\n0.029\n-0.074\n0.041\n0.563\n\n\nNortheast\n-0.080\n0.065\n-0.211\n0.051\n0.224\n\n\nSouth\n0.002\n0.057\n-0.113\n0.117\n0.974\n\n\nWest\n0.183\n0.061\n0.059\n0.306\n0.005\n\n\n\n\n\n\n\n\nAfter accounting for region, the model explains 30.2% of the variation in hours per fill-up (adjusted R² = 0.24). Holding the unemployment rate constant, Western states required an estimated 0.18 more hours of work per fill-up than Midwestern states (p = 0.0047). The Northeast and South do not differ significantly from the Midwest."
+  },
+  {
+    "objectID": "visuals/scatter_regression.html#limitations",
+    "href": "visuals/scatter_regression.html#limitations",
+    "title": "Gasoline Affordability and Unemployment",
+    "section": "Limitations",
+    "text": "Limitations\n\n\nOne month only. The analysis uses September 2026 so that each state is an independent observation. The relationship may differ in other months.\nCorrelation, not causation. The regression describes an association across states and cannot show that unemployment or region causes differences in affordability.\nAverage workers. Hours per fill-up uses each state’s average weekly earnings and hours. It does not reflect affordability for unemployed people or low-wage workers, who may be hit hardest.\nSmall sample. With 50 states, the model has limited power to detect weak relationships."
+  },
+  {
+    "objectID": "visuals/scatter_regression.html#gas-prices-and-unemployment",
+    "href": "visuals/scatter_regression.html#gas-prices-and-unemployment",
+    "title": "Gasoline Affordability and Unemployment",
+    "section": "",
+    "text": "Our main question is whether states with higher gasoline prices also have higher unemployment. Here, each point is a state in September 2026, colored by region. The x-axis is the real price of regular gasoline, and the y-axis is the unemployment rate. The gray line is a straight-line trend fitted across all 50 states, and the shaded band shows the uncertainty around it.\n\n\n\n\n\n\n\n\nFigure 1: Real price of regular gasoline and unemployment rate, by state, September 2026. The gray line shows a straight-line trend, and the shaded band shows the uncertainty around it.\n\n\n\n\nThe trend line rises: states with more expensive gas tend to have somewhat higher unemployment, though the points are widely scattered around the line, so the relationship is weak. Because this compares states at a single point in time, it shows an association, not that higher gas prices cause higher unemployment."
+  },
+  {
+    "objectID": "visuals/scatter_regression.html#gasoline-affordability-and-unemployment",
+    "href": "visuals/scatter_regression.html#gasoline-affordability-and-unemployment",
+    "title": "Gasoline Affordability and Unemployment",
+    "section": "Gasoline affordability and unemployment",
+    "text": "Gasoline affordability and unemployment\nTo see whether states with weaker labor markets also faced a heavier gasoline burden, we compare each state’s unemployment rate with the number of hours of work needed to buy 15 gallons of regular gasoline in September 2026. Each point is a state, colored by region, and the gray line is a straight-line trend fitted across all states, with a shaded band showing the uncertainty around it. The trend line stays fairly flat, suggesting little relationship between unemployment and gasoline affordability across states. Hover over any point to see the state and its values.\n\n\n\n\n\n\n\n\nFigure 2: Unemployment rate and hours of work needed to buy 15 gallons of regular gasoline, by state, September 2026. The gray line shows a straight-line trend, and the shaded band shows the uncertainty around it."
   }
 ]
