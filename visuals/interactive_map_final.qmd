@@ -5,6 +5,7 @@ format: html
 
 
 ```{r}
+#| echo: false
 library(tidyverse)
 library(sf)
 library(plotly)
@@ -12,7 +13,7 @@ library(ggplot2)
 ```
 
 ```{r}
-
+#| echo: false
 #Reading Data
 full_data_with_state <- readRDS("../data/full_data_for_interactive_map.rds")
 
